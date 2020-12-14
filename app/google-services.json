@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "555797967140",
+    "firebase_url": "https://eashwarenterprises-ef5a5-default-rtdb.firebaseio.com",
+    "project_id": "eashwarenterprises-ef5a5",
+    "storage_bucket": "eashwarenterprises-ef5a5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:555797967140:android:2e40163ddfd5fcedac43b1",
+        "android_client_info": {
+          "package_name": "com.example.grocerieslist"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "555797967140-roeh0f2nivimeun7eofclpe20cansl11.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.grocerieslist",
+            "certificate_hash": "ac0424e3ded39a444232f4bcfdbfe931fe787d40"
+          }
+        },
+        {
+          "client_id": "555797967140-jr7com7defpgnqr9r0qlsnd6lj9idmro.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC24i9KZL8KoW4dWW7tkuE1mLlgECubaIk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "555797967140-jr7com7defpgnqr9r0qlsnd6lj9idmro.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
