@@ -9,11 +9,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.util.Log;
 import android.widget.Toast;
-
 import com.example.grocerieslist.db.product.ProductClass;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -41,7 +37,7 @@ public class AppGlobal {
     public String App_Email = "email";
     public String App_Gender = "gender";
     public String App_WhatsApp_Number = "whatsAppNumber";
-    public String App_Cart_Group = "cartGroup";
+    public String App_Pass_Code = "passCode";
 
     public String App_Selected_Prod = "prodSelected";
 
@@ -277,10 +273,35 @@ public class AppGlobal {
 
     /**************************************************************************/
     /**************************************************************************/
-    public void storeToFB(String path,Object obj){
+    /*public String storeToFB(String path,Object obj){
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference(path);
         String ids = reference.push().getKey();
         ProductClass pfb = (ProductClass) obj;
-        reference.child(ids).setValue(pfb);
+        pfb.setFid(ids);
+        try {
+            reference.child(ids).setValue(pfb);
+            Log.i(TAG,"Product keys :"+ids);
+        }catch (Exception e){
+            Log.i(TAG,"exception "+e.getStackTrace());
+        }
+        return ids;
     }
+
+    *//**************************************************************************//*
+    *//**************************************************************************//*
+    public String updateToFB(String path,Object obj){
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference(path);
+        ProductClass pfb = (ProductClass) obj;
+        String ids = pfb.getFid();
+        pfb.setFid(ids);
+        reference.child(ids).setValue(pfb);
+
+        return ids;
+    }
+
+    public void deleteFB(String path){
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+        reference.removeValue();
+    }*/
+
 }

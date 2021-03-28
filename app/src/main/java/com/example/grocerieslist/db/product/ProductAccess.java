@@ -8,8 +8,6 @@ import android.util.Log;
 
 import com.example.grocerieslist.utilities.AppGlobal;
 import com.example.grocerieslist.utilities.Constant;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,8 +38,10 @@ public class ProductAccess {
             return -1;
         ContentValues values = new ContentValues();
         values.put(ProductDB.KEY_NAME,prod.getName());
+        values.put(ProductDB.KEY_DESC,prod.getDesc());
         values.put(ProductDB.KEY_PACK_UOM,prod.getPackuom());
         values.put(ProductDB.KEY_HSN,prod.getHsn());
+        values.put(ProductDB.KEY_FireBase_Id,prod.getFid());
         values.put(ProductDB.KEY_GST,prod.getGst());
         values.put(ProductDB.KEY_UOM,prod.getUom());
         values.put(ProductDB.KEY_PACKING_SIZE,prod.getPackingsize());
@@ -60,7 +60,10 @@ public class ProductAccess {
         long res = database.insert(ProductDB.TABLE, null, values);
         if(res > 0) {
             Log.i(TAG,"product classes is "+prod.toString());
-            global.storeToFB(Constant.FB_Product_Path, prod);
+            /*String ids = global.storeToFB(Constant.FB_Product_Path, prod);
+            global.deleteFB(Constant.FB_Product_Path);
+            prod.setFid(ids);
+            updateProd(prod);*/
         }
         return res;
     }
@@ -73,8 +76,40 @@ public class ProductAccess {
                 ProductDB.KEY_PACK_UOM+" = '"+prod.getPackuom()+"'";
 
         Cursor cursor = database.rawQuery(myquery,null);
-        if(cursor.getCount() > 0)
+        if(cursor.getCount() > 0){
             res = true;
+        }
+        return res;
+    }
+
+    public long updateProd(ProductClass pc){
+        long res = 0;
+        String myquery = "update " + ProductDB.TABLE + " set " + ProductDB.KEY_NAME + " = '" + pc.getName() +"',"+
+                ProductDB.KEY_DESC + " = '" + pc.getDesc() +"',"+
+                ProductDB.KEY_PACK_UOM + " = '" + pc.getPackuom() +"',"+
+                ProductDB.KEY_HSN + " = '" + pc.getHsn() +"',"+
+                ProductDB.KEY_FireBase_Id + " = '" + pc.getFid() +"',"+
+                ProductDB.KEY_GST + " = '" + pc.getGst() +"',"+
+                ProductDB.KEY_UOM + " = '" + pc.getUom() +"',"+
+                ProductDB.KEY_PACKING_SIZE + " = '" + pc.getPackingsize() +"',"+
+                ProductDB.KEY_CASE_QTY + " = '" + pc.getCaseqty() +"',"+
+                ProductDB.KEY_SHEET_NO + " = '" + pc.getSheetNo() +"',"+
+                ProductDB.KEY_MRP + " = '" + pc.getMrp() +"',"+
+                ProductDB.KEY_SPECIAL + " = '" + pc.getSpecial() +"',"+
+                ProductDB.KEY_RETAIL + " = '" + pc.getRetail() +"',"+
+                ProductDB.KEY_TYPE + " = '" + pc.getType() +"',"+
+                ProductDB.KEY_GROUP + " = '" + pc.getGroup() +"',"+
+                ProductDB.KEY_TS + " = '" + pc.getTs() +"',"+
+                ProductDB.KEY_PUR_RATE + " = '" + pc.getPurRate() +"',"+
+                ProductDB.KEY_STATUS + " = '" + pc.getStatus() +"'"+
+                " where " + ProductDB.KEY_ID + " = '" + pc.getId() + "'";
+        Cursor cursor = database.rawQuery(myquery,null);
+        if(cursor.getCount() > 0){
+            res = cursor.getCount();
+            Log.i(TAG,"update result is "+res);
+
+            //global.updateToFB(Constant.FB_Product_Path,pc);
+        }
         return res;
     }
 
@@ -116,6 +151,44 @@ public class ProductAccess {
 
     /*******************************************************************/
     /*******************************************************************/
+    public List<ProductClass> getProdCatagoryDetails(String str){
+        List<ProductClass> comments = new ArrayList<>();
+        String myquery = "select * from " + ProductDB.TABLE +" where "+
+                ProductDB.KEY_GROUP + " = '"+ str+"'";
+
+        Cursor cursor = database.rawQuery(myquery, null);
+
+        Log.i(TAG,"size is "+cursor.getCount());
+        cursor.moveToFirst();
+        while(!cursor.isAfterLast()){
+            ProductClass name = cursorTotemp(cursor);
+            comments.add(name);
+            cursor.moveToNext();
+        }
+        cursor.close();
+        return comments;
+    }
+
+    /*******************************************************************/
+    /*******************************************************************/
+    public List<String> getProdCatagoryDetails(){
+        List<String> comments = new ArrayList<>();
+        String myquery = "select DISTINCT "+ProductDB.KEY_GROUP+" from " + ProductDB.TABLE ;
+
+        Log.i(TAG,"query is "+myquery);
+        Cursor cursor = database.rawQuery(myquery, null);
+        cursor.moveToFirst();
+        while(!cursor.isAfterLast()){
+            comments.add(cursor.getString(cursor.getColumnIndex(ProductDB.KEY_GROUP)));
+
+            cursor.moveToNext();
+        }
+        cursor.close();
+        return comments;
+    }
+
+    /*******************************************************************/
+    /*******************************************************************/
     public ProductClass getProdDetails(String id){
         ProductClass comments = new ProductClass();
         String myquery = "select * from " + ProductDB.TABLE +" where "+
@@ -132,31 +205,13 @@ public class ProductAccess {
     }
 
     /*******************************************************************/
-    /*******************************************************************/
-    /*public List<ProductClass> getProdDetails(String item,String gro){
-        List<ProductClass> comments = new ArrayList<>();
-        String myquery = "select * from " + ProductDB.TABLE ;
-        if(item.equals(Constants.GROUP)){
-            myquery = myquery +" where "+
-                    ProductDB.KEY_GROUP + " = '"+ gro+"'";
-        }
-        Cursor cursor = database.rawQuery(myquery, null);
-        cursor.moveToFirst();
-        while(!cursor.isAfterLast()){
-            ProductClass name = cursorTotemp(cursor);
-            comments.add(name);
-            cursor.moveToNext();
-        }
-        cursor.close();
-        return comments;
-    }*/
-
-    /*******************************************************************/
     private ProductClass cursorTotemp(Cursor cursor)	{
         ProductClass temp = new ProductClass(
                 cursor.getString(cursor.getColumnIndex(ProductDB.KEY_ID)),
                 cursor.getString(cursor.getColumnIndex(ProductDB.KEY_NAME)),
+                cursor.getString(cursor.getColumnIndex(ProductDB.KEY_DESC)),
                 cursor.getString(cursor.getColumnIndex(ProductDB.KEY_TS)),
+                cursor.getString(cursor.getColumnIndex(ProductDB.KEY_FireBase_Id)),
                 cursor.getString(cursor.getColumnIndex(ProductDB.KEY_PACK_UOM)),
                 cursor.getString(cursor.getColumnIndex(ProductDB.KEY_UOM)),
                 cursor.getString(cursor.getColumnIndex(ProductDB.KEY_PACKING_SIZE)),

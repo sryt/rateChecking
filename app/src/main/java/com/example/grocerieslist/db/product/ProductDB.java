@@ -16,6 +16,7 @@ public class ProductDB extends SQLiteOpenHelper {
     public static final String TABLE = "products";
     public static final String KEY_ID = "id";
     public static final String KEY_NAME = "name";
+    public static final String KEY_DESC = "description";
     public static final String KEY_TS = "ts";
     public static final String KEY_PACK_UOM = "packuom";
     public static final String KEY_UOM = "uom";
@@ -31,6 +32,7 @@ public class ProductDB extends SQLiteOpenHelper {
     public static final String KEY_HSN = "HSN";
     public static final String KEY_TYPE = "types";
     public static final String KEY_GROUP = "groups";
+    public static final String KEY_FireBase_Id = "firebaseId";
     public static final String KEY_STATUS = "status";
 
     public ProductDB(Context context) {
@@ -43,7 +45,9 @@ public class ProductDB extends SQLiteOpenHelper {
         String CREATE_TABLE = "CREATE TABLE " + TABLE + "("
                 + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL ,"
                 + KEY_NAME + " TEXT,"
+                + KEY_DESC + " TEXT,"
                 + KEY_TS + " TEXT,"
+                + KEY_FireBase_Id + " TEXT,"
                 + KEY_PACK_UOM + " TEXT,"
                 + KEY_HSN + " TEXT,"
                 + KEY_GST + " TEXT,"

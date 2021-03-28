@@ -6,7 +6,9 @@ package com.example.grocerieslist.db.product;
 public class ProductClass {
     public String id;
     public String name;
+    public String desc;
     public String ts;
+    public String fid;
     public String packuom;
     public String uom;
     public String packingsize;
@@ -26,12 +28,33 @@ public class ProductClass {
     public ProductClass() {
     }
 
-    public ProductClass(String name, String ts, String packuom, String uom, String packingsize,
+    public ProductClass(ProductFB pfb){
+        this.id = pfb.getId();
+        this.name = pfb.getName();
+        this.packuom = pfb.getPackUom();
+        this.uom = pfb.getUom();
+        this.packingsize = pfb.getPackingSize();
+        this.mrp = pfb.getMrp();
+        this.cost = pfb.getCost();
+        this.special = pfb.getSpecial();
+        this.retail = pfb.getRetail();
+        this.caseqty = pfb.getCaseQty();
+        this.gst = pfb.getGst();
+        this.hsn = pfb.getHsn();
+        this.type = pfb.getType();
+        this.group = pfb.getGroup();
+        this.fid = pfb.getFirebaseId();
+        this.status = pfb.getStatus();
+    }
+
+    public ProductClass(String name,String desc,String ts, String fid,String packuom, String uom, String packingsize,
                         String mrp, String purRate, String cost, String special, String retail,
                         String caseqty, String sheetNo, String gst, String hsn, String type,
                         String group, String status) {
         this.name = name;
+        this.desc = desc;
         this.ts = ts;
+        this.fid = fid;
         this.packuom = packuom;
         this.uom = uom;
         this.packingsize = packingsize;
@@ -50,13 +73,15 @@ public class ProductClass {
     }
 
 
-    public ProductClass(String id, String name, String ts, String packuom, String uom,
+    public ProductClass(String id, String name,String desc,String ts,String fid,String packuom, String uom,
                         String packingsize, String mrp, String purRate, String cost,
                         String special, String retail, String caseqty, String sheetNo,
                         String gst, String hsn, String type, String group, String status) {
         this.id = id;
         this.name = name;
+        this.desc = desc;
         this.ts = ts;
+        this.fid = fid;
         this.packuom = packuom;
         this.uom = uom;
         this.packingsize = packingsize;
@@ -90,12 +115,28 @@ public class ProductClass {
         this.name = name;
     }
 
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
+
     public String getTs() {
         return ts;
     }
 
     public void setTs(String ts) {
         this.ts = ts;
+    }
+
+    public String getFid() {
+        return fid;
+    }
+
+    public void setFid(String fid) {
+        this.fid = fid;
     }
 
     public String getPackuom() {
@@ -223,7 +264,9 @@ public class ProductClass {
         return "ProductClass{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
+                ", desc='" + desc + '\'' +
                 ", ts='" + ts + '\'' +
+                ", fid='" + fid + '\'' +
                 ", packuom='" + packuom + '\'' +
                 ", uom='" + uom + '\'' +
                 ", packingsize='" + packingsize + '\'' +

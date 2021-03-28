@@ -19,7 +19,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
 
 /**
  * Created by Tejaswi on 11/12/20.
@@ -48,71 +47,54 @@ public class Loading extends AppCompatActivity {
         Thread splashthread = new Thread(){
             public void run(){
                 try{
-                    inputStream = getResources().openRawResource(R.raw.prodb);
+                    inputStream = getResources().openRawResource(R.raw.allfields);
 
                     BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
                     try {
                         String csvLine;
-                        Log.i(TAG,"column1\t\t\tcolumn2\t\t\tcolumn3\t\t\tcolumn4\t\t\tcolumn5\t\t\tcolumn6\t\t\tcolumn7");
                         while ((csvLine = reader.readLine()) != null) {
+                            Log.i(TAG,"csv line is "+csvLine);
                             ids=csvLine.split(",");
                             try{
-                                /*String name,cPrice,wPrice,rPrice,mrp,caseqty,sheet;
-                                name = checkValue(ids[0]);
-                                cPrice = checkValue(ids[1]);
-                                wPrice = checkValue(ids[2]);
-                                rPrice = checkValue(ids[3]);
-                                mrp = checkValue(ids[4]);
-                                caseqty = checkValue(ids[5]);
-                                if(ids.length == 7)
-                                    sheet = checkValue(ids[6]);
-                                else
-                                    sheet = "0";*/
+                                /**
+                                 * 0 - Name                        7 - Selling Rate
+                                 * 1 - Group                       8 - Special Rate
+                                 * 2 - Company                     9 - Packing Unit
+                                 * 3 - GST                         10 - Pcs per Sheet
+                                 * 4 - P Rate                      11 - Supplier
+                                 * 5 - c Rate                      12 - HSN
+                                 * 6 - MRP                         13 - Weight
+                                 */
 
                                 String name = checkValue(ids[0]);
                                 String group = checkValue(ids[1]);
-                                String gst = checkValue(ids[2]);
-                                String pPrice = checkValue(ids[3]);
-                                String cPrice = checkValue(ids[4]);
-                                String mrp = checkValue(ids[5]);
-                                String rPrice = checkValue(ids[6]);
-                                String wPrice = checkValue(ids[7]);
-                                String uom = checkValue(ids[8]);
-                                String hsn = checkValue(ids[9]);
-                                String caseqty = "NA";
-                                String sheet = "NA";
-
-                                if(group.equals(Constant.Toilet)){
-
-                                }else if(group.equals(Constant.Snacks)){
-
-                                }else if(group.equals(Constant.Groceries)){
-
-                                }else if(group.equals(Constant.Groceries)){
-
-                                }else if(group.equals(Constant.Groceries)){
-
-                                }else if(group.equals(Constant.Groceries)){
-
-                                }else if(group.equals(Constant.Groceries)){
-
-                                }else if(group.equals(Constant.Groceries)){
-
-                                }else if(group.equals(Constant.Groceries)){
-
-                                }else if(group.equals(Constant.Groceries)){
-
-                                }else if(group.equals(Constant.Groceries)){
-
+                                String company = checkValue(ids[2]);
+                                String gst = checkValue(ids[3]);
+                                String pPrice = checkValue(ids[4]);
+                                String cPrice = checkValue(ids[5]);
+                                String mrp = checkValue(ids[6]);
+                                String rPrice = checkValue(ids[7]);
+                                String wPrice = checkValue(ids[8]);
+                                String uom = checkValue(ids[9]);
+                                String sheet = checkValue(ids[10]);
+                                String supplier= "Not Mention";
+                                if(ids.length >11 && ids[11] != null){
+                                    supplier = checkValue(ids[11]);
+                                }
+                                String hsn = "Not Mention";
+                                if(ids.length > 12 && ids[12] != null){
+                                    hsn = checkValue(ids[12]);
                                 }
 
+                                String caseqty = "0";
+                                if(ids.length > 13 && ids[13] != null)
+                                    caseqty = checkValue(ids[13]);
 
-                                setProduct(name,pPrice,cPrice,wPrice,rPrice,mrp,caseqty,sheet,gst,hsn,uom,group);
-                                Log.i(TAG,name+"\t\t\t"+pPrice+"\t\t\t"+cPrice+"\t\t\t"+wPrice+
-                                        "\t\t\t"+rPrice +"\t\t\t"+mrp+"\t\t\t"+caseqty+"\t\t\t"+sheet+"" +
-                                        "\t\t\t"+gst+"\t\t\t"+hsn+"\t\t\t"+uom+"\t\t\t"+group) ;
+                                String desc = name+ " of brand "+ company +", is supplied by " + supplier+". Product packing weight is "+caseqty+uom;
+
+                                setProduct(name,pPrice,cPrice,wPrice,rPrice,mrp,caseqty,sheet,gst,hsn,uom,company,group,desc);
                             }catch (Exception e){
-                                Log.e("Unknown",e.toString());
+                                Log.e(TAG,e.toString());
                             }
                         }
                     }
@@ -133,10 +115,12 @@ public class Loading extends AppCompatActivity {
     }
 
     public void setProduct(String name,String pPrice,String cPrice,String wPrice,String rPrice,String mrp,String caseQty,String sheet,
-                           String gst,String hsn,String uom,String group){
-        ProductClass pc1 = new ProductClass(name,String.valueOf(System.currentTimeMillis()),"",
+                           String gst,String hsn,String uom,String type,String group,String desc){
+        ProductClass pc1 = new ProductClass(name,desc,String.valueOf(System.currentTimeMillis()),"","",
                 uom,"",mrp,pPrice,cPrice,wPrice,rPrice,caseQty,sheet,
-                gst,hsn,group, Constant.Snacks,Constant.ACTIVE);
+                gst,hsn,type, group,Constant.ACTIVE);
+
+        Log.i(TAG,"saving class "+pc1.toString());
         ProductAccess pa = new ProductAccess(Loading.this);
         pa.open();
         pa.addProdDetails(pc1);
