@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Groceries List</string>
     <string name="action_settings">Settings</string>
+    <string name="action_price">Price List</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
@@ -11,7 +12,8 @@
     <string name="values">Values</string>
 
     <string name="packingSize">Packing Size</string>
-    <string name="packingUnit">Packing Units</string>
+    <string name="packingUnit">Packing Unit</string>
+    <string name="uom">Unit of measurement</string>
     <string name="caseQty">Case Quantity</string>
     <string name="hsn">HSN Code</string>
     <string name="gst">GST %</string>
@@ -19,11 +21,61 @@
     <string name="cPrice">Cost</string>
     <string name="wPrice">Whole</string>
     <string name="rPrice">Retailer</string>
+    <string name="cP">C</string>
+    <string name="wP">W</string>
+    <string name="rP">R</string>
+
     <string name="mrp">MRP</string>
     <string name="sheet">Pieces per Sheet</string>
+    <string name="priceUpdate">Price Update</string>
+    <string name="cancel">CANCEL</string>
+    <string name="save">SAVE</string>
 
+    <string name="product_create">Create Product</string>
+    <string name="product_name">Product Name</string>
+    <string name="product_desc">Product description</string>
+    <string name="category">Category</string>
+    <string name="product_brand">Product Brand</string>
+    <string name="product_packing">Packing Details</string>
+    <string name="product_mfr">Manufacture Details</string>
+    <string name="mfr_name">Manufacture Name</string>
+    <string name="second_measurement">Secondary measurement</string>
+    <string name="sheets_no">Sheets Number</string>
+    <string name="packing_size">Case packing</string>
+    <string name="verify">Verification Code</string>
+
+    <string name="serverpath">Server Path</string>
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+
+    <string-array name="group">
+        <item>Rice</item>
+        <item>Dall</item>
+        <item>Flour</item>
+        <item>Oil</item>
+        <item>Ghee</item>
+        <item>Masala</item>
+        <item>Sugar</item>
+        <item>Salt</item>
+    </string-array>
+
+    <string-array name="gstValues">
+        <item>GST 0%</item>
+        <item>GST 5%</item>
+        <item>GST 12%</item>
+        <item>GST 18%</item>
+        <item>GST 28%</item>
+    </string-array>
+
+    <string-array name="uom">
+        <item>Gms</item>
+        <item>Kgs</item>
+        <item>Lts</item>
+        <item>Ml</item>
+        <item>Mt</item>
+        <item>Nos</item>
+    </string-array>
+
 
     <string name="demo">Product discription in detail hello_second_fragmenthello_second_fragmenthello_second_fragmenthello_second_fragmenthello_second_fragmenthello_second_fragmenthello_second_fragmenthello_second_fragmenthello_second_fragmenthello_second_fragment</string>
 </resources>
