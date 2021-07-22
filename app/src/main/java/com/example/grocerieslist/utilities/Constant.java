@@ -86,6 +86,11 @@ public class Constant {
     public static String Payment = "Payment";
     public static String PriceSym = "/-";
 
+    public static String INWARDS = "INWARDS";
+    public static String OUTWARDS = "OUTWARDS";
+    public static String CURRENT = "CURRENT";
+
+
     public static String DB_Account = "ee_account";
     public static String DB_Group = "ee_group";
     public static String DB_HSN = "ee_hsn";
@@ -94,6 +99,8 @@ public class Constant {
     public static String DB_Cart = "ee_cart";
     public static String DB_Sales = "ee_sales";
     public static String DB_Company = "ee_company";
+    public static String DB_Stock = "ee_stock";
+    public static String DB_Customer = "ee_customer";
     public static String Product = "Product";
     public static String Account = "Account";
     public static String HSN = "HSN";

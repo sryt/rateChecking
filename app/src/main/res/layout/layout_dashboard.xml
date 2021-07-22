@@ -125,7 +125,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:cardCornerRadius="10dp"
-        android:id="@+id/cp_card_rate"
+        android:id="@+id/ld_dashboard_share"
         android:padding="10dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
@@ -143,11 +143,11 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@android:drawable/ic_input_add"/>
+                    android:src="@android:drawable/ic_menu_share"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/companyDesc"/>
+                    android:text="@string/stock"/>
             </LinearLayout>
         </FrameLayout>
     </androidx.cardview.widget.CardView>

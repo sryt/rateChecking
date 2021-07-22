@@ -37,6 +37,7 @@
         <activity android:name=".init.CompanyDetails" android:screenOrientation="portrait"/>
         <activity android:name=".init.CompanyList" android:screenOrientation="portrait"/>
         <activity android:name=".init.NewSales" android:screenOrientation="portrait"/>
+        <activity android:name=".init.ProductStock" android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

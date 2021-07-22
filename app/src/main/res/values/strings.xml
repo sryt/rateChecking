@@ -63,7 +63,7 @@
     <string name="sheets_no">Sheets Number</string>
     <string name="packing_size">Case packing</string>
     <string name="verify">Verification Code</string>
-
+    <string name="stock">Stock</string>
     <string name="serverpath">Server Path</string>
     <string name="importData">Import Data</string>
     <string name="imposrtDataD">Specify the path of the file to process the data.</string>
@@ -72,6 +72,19 @@
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 
+
+    <string name="sa_prodName">Product Name</string>
+    <string name="sa_datetime">Date and Time</string>
+    <string name="sa_qty">Quantity</string>
+    <string name="sa_type">Choose one of the stock type:</string>
+    <string name="sa_remark">Remark</string>
+    <string name="sa_customer">Customer</string>
+    <string name="sa_add">Inward Stock</string>
+    <string name="sa_minus">Outward Stock</string>
+    <string name="sa_add_onemore">Add Product</string>
+    <string name="sa_save">Save</string>
+    <string name="cust_type">Customer Type</string>
+    <string name="cust_name">Customer Name</string>
 
     <!--Dashboard details -->
     <string name="lastBillNo">Last Bill Number:</string>
@@ -112,6 +125,10 @@
         <item>Nos</item>
     </string-array>
 
+    <array name="cust_type_value">
+        <item>Credit</item>
+        <item>Cash</item>
+    </array>
 
     <string name="demo">Product discription in detail hello_second_fragmenthello_second_fragmenthello_second_fragmenthello_second_fragmenthello_second_fragmenthello_second_fragmenthello_second_fragmenthello_second_fragmenthello_second_fragmenthello_second_fragment</string>
 </resources>

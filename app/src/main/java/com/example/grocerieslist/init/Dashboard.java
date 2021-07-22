@@ -8,8 +8,10 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.example.grocerieslist.R;
+import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 /**
  * Created by Tejaswi on 30/06/21.
@@ -17,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class Dashboard extends AppCompatActivity {
     String TAG = Dashboard.class.getSimpleName();
 
+    CardView share;
     LinearLayout salesLL;
 
     @Override
@@ -30,12 +33,20 @@ public class Dashboard extends AppCompatActivity {
         super.onResume();
 
         salesLL = findViewById(R.id.ld_sales);
-
+        share = findViewById(R.id.ld_dashboard_share);
 
         salesLL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent newSales = new Intent(Dashboard.this,NewSales.class);
+                startActivity(newSales);
+            }
+        });
+
+        share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent newSales = new Intent(Dashboard.this,ProductStock.class);
                 startActivity(newSales);
             }
         });
