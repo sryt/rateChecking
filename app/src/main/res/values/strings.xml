@@ -1,7 +1,13 @@
 <resources>
     <string name="app_name">Groceries List</string>
     <string name="action_settings">Settings</string>
+    <string name="action_add">Add</string>
+    <string name="action_company">Company</string>
+    <string name="action_cart">Cart</string>
     <string name="action_price">Price List</string>
+    <string name="action_filterview">Filter View</string>
+
+    <string name="company_adding">Kindly create the companies first.</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
@@ -10,6 +16,20 @@
 
     <string name="arguments">Arguments</string>
     <string name="values">Values</string>
+
+    <string name="companyName">Company Name</string>
+    <string name="ownerName">Owner Name</string>
+    <string name="address">Address</string>
+    <string name="place">Place</string>
+    <string name="pincode">Pincode</string>
+    <string name="phoneNumber">Phone Number</string>
+    <string name="emailId">Email ID</string>
+    <string name="gstNumber">GST Number</string>
+    <string name="bankDetails">Bank Details</string>
+    <string name="bankName">Bank Name</string>
+    <string name="accNumber">Account Number</string>
+    <string name="bankBranch">Bank Branch</string>
+    <string name="ifsc">IFSC Code</string>
 
     <string name="packingSize">Packing Size</string>
     <string name="packingUnit">Packing Unit</string>
@@ -45,8 +65,24 @@
     <string name="verify">Verification Code</string>
 
     <string name="serverpath">Server Path</string>
+    <string name="importData">Import Data</string>
+    <string name="imposrtDataD">Specify the path of the file to process the data.</string>
+    <string name="companyTitle">Companies Details</string>
+    <string name="companyDesc">About company.</string>
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+
+
+    <!--Dashboard details -->
+    <string name="lastBillNo">Last Bill Number:</string>
+    <string name="lastBillTime">Last Bill Time:</string>
+    <string name="sales">Sales</string>
+    <string name="purchase">Purchase</string>
+
+
+    <string name="billNo">Bill Number:</string>
+    <string name="date">Date :</string>
+
 
     <string-array name="group">
         <item>Rice</item>

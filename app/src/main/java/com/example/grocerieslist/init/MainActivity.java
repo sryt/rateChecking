@@ -5,9 +5,10 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
 import com.example.grocerieslist.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -31,8 +32,6 @@ public class MainActivity extends AppCompatActivity {
 
                 Intent create = new Intent(MainActivity.this,CreateProduct.class);
                 startActivity(create);
-                /*Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();*/
             }
         });
     }
@@ -60,7 +59,20 @@ public class MainActivity extends AppCompatActivity {
             Intent create = new Intent(MainActivity.this,PriceDetials.class);
             startActivity(create);
             return true;
+        }else if(id == R.id.action_filterview){
+            Intent filterView = new Intent(MainActivity.this,FilterView.class);
+            startActivity(filterView);
+            return true;
+        }else if(id == R.id.action_company){
+            Intent filterView = new Intent(MainActivity.this,CompanyList.class);
+            startActivity(filterView);
+            return true;
+        }else if(id == R.id.action_cart){
+            Intent filterView = new Intent(MainActivity.this,FilterView.class);
+            startActivity(filterView);
+            return true;
         }
+
 
 
         return super.onOptionsItemSelected(item);

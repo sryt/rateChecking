@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.example.grocerieslist.utilities.AppGlobal;
-import com.example.grocerieslist.utilities.Constant;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,13 +57,7 @@ public class ProductAccess {
         values.put(ProductDB.KEY_STATUS,prod.getStatus());
 
         long res = database.insert(ProductDB.TABLE, null, values);
-        if(res > 0) {
-            Log.i(TAG,"product classes is "+prod.toString());
-            /*String ids = global.storeToFB(Constant.FB_Product_Path, prod);
-            global.deleteFB(Constant.FB_Product_Path);
-            prod.setFid(ids);
-            updateProd(prod);*/
-        }
+        Log.i(TAG,"result is: "+res);
         return res;
     }
 

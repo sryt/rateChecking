@@ -84,7 +84,7 @@ public class Constant {
 
     public static String Receipts = "Receipts";
     public static String Payment = "Payment";
-
+    public static String PriceSym = "/-";
 
     public static String DB_Account = "ee_account";
     public static String DB_Group = "ee_group";
@@ -92,7 +92,8 @@ public class Constant {
     public static String DB_Product = "ee";
     public static String DB_User = "ee_user";
     public static String DB_Cart = "ee_cart";
-
+    public static String DB_Sales = "ee_sales";
+    public static String DB_Company = "ee_company";
     public static String Product = "Product";
     public static String Account = "Account";
     public static String HSN = "HSN";

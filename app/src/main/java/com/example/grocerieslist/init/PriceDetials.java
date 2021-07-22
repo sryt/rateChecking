@@ -1,14 +1,16 @@
 package com.example.grocerieslist.init;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
@@ -51,6 +53,50 @@ public class PriceDetials extends AppCompatActivity {
         lv = findViewById(R.id.listview);
         txt = findViewById(R.id.search);
         filterBtn = findViewById(R.id.filter);
+
+        /**
+         * back button in tool bar
+         */
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == android.R.id.home) {
+            finish();
+            return true;
+        } else if (id == R.id.action_settings) {
+            Intent create = new Intent(PriceDetials.this,SettingsPage.class);
+            startActivity(create);
+            return true;
+        }else if (id == R.id.action_price) {
+            Intent create = new Intent(PriceDetials.this,Dashboard.class);
+            startActivity(create);
+            return true;
+        }else if(id == R.id.action_filterview){
+            Intent filterView = new Intent(PriceDetials.this,FilterView.class);
+            startActivity(filterView);
+            return true;
+        }else if(id == R.id.action_company){
+            Intent filterView = new Intent(PriceDetials.this,CompanyList.class);
+            startActivity(filterView);
+            return true;
+        }else if(id == R.id.action_cart){
+            Intent filterView = new Intent(PriceDetials.this,MainActivity.class);
+            startActivity(filterView);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -175,5 +221,23 @@ public class PriceDetials extends AppCompatActivity {
         pa.close();
 
         Log.i(TAG,"product list size is "+pcs.size());
+    }
+
+
+    boolean doubleBackToExitPressedOnce = false;
+    @Override
+    public void onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            return;
+        }
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce=false;
+            }
+        }, 2000);
     }
 }

@@ -2,14 +2,35 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.grocerieslist.init.MainActivity">
+
+    <item
+        android:id="@+id/action_company"
+        android:orderInCategory="100"
+        app:showAsAction="always"
+        android:icon="@mipmap/outline_store_white_24"
+        android:title="@string/action_settings"/>
+    <item
+        android:id="@+id/action_cart"
+        android:orderInCategory="100"
+        app:showAsAction="always"
+        android:icon="@mipmap/outline_shopping_cart_white_24"
+        android:title="@string/action_cart"/>
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
         android:title="@string/action_settings"
-        app:showAsAction="never" />
+        android:icon="@mipmap/outline_settings_black_24"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_filterview"
+        android:orderInCategory="100"
+        android:icon="@mipmap/outline_filter_list_black_24"
+        android:title="@string/action_filterview"
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_price"
         android:orderInCategory="100"
+        android:icon="@mipmap/outline_local_offer_black_24"
         android:title="@string/action_price"
-        app:showAsAction="never" />
+        app:showAsAction="ifRoom" />
 </menu>

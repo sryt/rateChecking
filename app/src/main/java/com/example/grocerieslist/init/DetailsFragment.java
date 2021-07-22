@@ -7,7 +7,6 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +15,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.grocerieslist.R;
@@ -33,6 +33,7 @@ public class DetailsFragment extends Fragment {
     String TAG = DetailsFragment.class.getSimpleName();
     AppGlobal global;
 
+    ImageView proImg;
     TextView prodName,proDesc,pPrice,cPrice,wPrice,rPrice,mrp,pSize,pUnit,caseQty,hsn,gst,sheetNo,uom;
     boolean visFlag=false;
     ProductClass selectedProd;
@@ -45,6 +46,7 @@ public class DetailsFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.detailsfragment, container, false);
         global = new AppGlobal(getActivity());
 
+        proImg = rootView.findViewById(R.id.proImg);
         prodName = rootView.findViewById(R.id.prodName);
         proDesc = rootView.findViewById(R.id.prodDesc);
         pPrice = rootView.findViewById(R.id.pPrice);
@@ -78,10 +80,10 @@ public class DetailsFragment extends Fragment {
 
         prodName.setText(selectedProd.getName());
         proDesc.setText(selectedProd.getDesc());
-        pPrice.setText(selectedProd.getPurRate()+"/-");
-        cPrice.setText(selectedProd.getCost()+"/-");
-        wPrice.setText(selectedProd.getSpecial()+"/-");
-        rPrice.setText(selectedProd.getRetail()+"/-");
+        pPrice.setText(selectedProd.getPurRate()+Constant.PriceSym);
+        cPrice.setText(selectedProd.getCost()+Constant.PriceSym);
+        wPrice.setText(selectedProd.getSpecial()+Constant.PriceSym);
+        rPrice.setText(selectedProd.getRetail()+Constant.PriceSym);
         mrp.setText(selectedProd.getMrp());
         pSize.setText(selectedProd.getPackingsize());
         pUnit.setText(selectedProd.getPackuom());

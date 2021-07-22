@@ -3,7 +3,6 @@ package com.example.grocerieslist.db.product;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.provider.SyncStateContract;
 
 import com.example.grocerieslist.utilities.Constant;
 

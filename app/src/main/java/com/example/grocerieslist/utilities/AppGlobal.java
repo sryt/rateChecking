@@ -9,7 +9,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.util.Log;
 import android.widget.Toast;
-import com.example.grocerieslist.db.product.ProductClass;
+
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -40,6 +40,8 @@ public class AppGlobal {
     public String App_Pass_Code = "passCode";
 
     public String App_Selected_Prod = "prodSelected";
+
+    public String App_Selected_Path = "prodPath";
 
     /**************************************************************************/
     public static final int DATE_FULL = 1 ;
@@ -285,11 +287,11 @@ public class AppGlobal {
             Log.i(TAG,"exception "+e.getStackTrace());
         }
         return ids;
-    }
+    }*/
 
-    *//**************************************************************************//*
-    *//**************************************************************************//*
-    public String updateToFB(String path,Object obj){
+    /************************************************************************/
+    /************************************************************************/
+    /*public String updateToFB(String path,Object obj){
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference(path);
         ProductClass pfb = (ProductClass) obj;
         String ids = pfb.getFid();
