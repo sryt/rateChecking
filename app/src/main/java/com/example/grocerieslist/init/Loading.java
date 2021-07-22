@@ -39,7 +39,7 @@ public class Loading extends AppCompatActivity {
                 }catch(InterruptedException e){
 
                 } finally {
-                    Intent splashintent = new Intent(Loading.this,Dashboard.class);
+                    Intent splashintent = new Intent(Loading.this,SlidingMenu.class);
                     startActivity(splashintent);
                     finish();
                 }
