@@ -43,6 +43,14 @@ public class AppGlobal {
 
     public String App_Selected_Path = "prodPath";
 
+    public String App_Product_Path = "productsPath";
+    public String App_Customer_Path = "cusomterPath";
+    public String App_Stock_Path = "stockPath";
+
+    public String App_Product_Path_Lastest = "prodPathLatest";
+    public String App_Customer_Path_Lastest = "customerPathLatest";
+    public String App_Stock_Path_Lastest = "stockPathLatest";
+
     /**************************************************************************/
     public static final int DATE_FULL = 1 ;
     public static final int DATE_DATE_TIME = 2;
@@ -166,21 +174,26 @@ public class AppGlobal {
     /**************************************************************************/
     /**************************************************************************/
     public void sendWhatsApp(String msg){
-        String phone = String.valueOf(getPreference(App_WhatsApp_Number));
+        /*String phone = String.valueOf(getPreference(App_WhatsApp_Number));
         if(phone.equals("null")){
             phone = "7397186661";
-        }
+        }*/
+        String phone ="7397186661";
         PackageManager packageManager = ctx.getPackageManager();
         Intent i = new Intent(Intent.ACTION_VIEW);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         if (i.resolveActivity(ctx.getPackageManager()) == null) {
+            Log.i(TAG,"whats app not installed");
             Toast.makeText(ctx, "Please install WhatsApp first.", Toast.LENGTH_SHORT)
                     .show();
             return;
         }else {
+            Log.i(TAG,"whats app installed");
             try {
                 String url = "https://api.whatsapp.com/send?phone=+91" + phone + "&text=" + URLEncoder.encode(msg, "UTF-8");
                 i.setPackage("com.whatsapp");
                 i.setData(Uri.parse(url));
+                Log.i(TAG,"completed the whatsapp sending.");
                 if (i.resolveActivity(packageManager) != null) {
                     ctx.startActivity(i);
                 }

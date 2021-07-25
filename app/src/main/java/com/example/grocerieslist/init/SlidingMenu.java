@@ -1,29 +1,55 @@
 package com.example.grocerieslist.init;
 
+import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.grocerieslist.R;
-import com.example.grocerieslist.fragment.FilterFragment;
-import com.example.grocerieslist.fragment.NotificationsFragment;
+import com.example.grocerieslist.background.ProcessCustAsync;
+import com.example.grocerieslist.background.ProcessDataAsync;
+import com.example.grocerieslist.background.ProcessStockAsync;
+import com.example.grocerieslist.db.stockdetails.StockDetailsAccess;
+import com.example.grocerieslist.db.stockdetails.StockDetailsClass;
+import com.example.grocerieslist.fragment.CompanyFragment;
+import com.example.grocerieslist.fragment.CustomerFragment;
+import com.example.grocerieslist.fragment.DashboardFragment;
+import com.example.grocerieslist.fragment.LocationFragment;
+import com.example.grocerieslist.fragment.PickUpPersonFragment;
 import com.example.grocerieslist.fragment.PriceListFragment;
+import com.example.grocerieslist.fragment.ProductFragment;
 import com.example.grocerieslist.fragment.ProductStockFragment;
+import com.example.grocerieslist.fragment.SettingsFragment;
+import com.example.grocerieslist.utilities.AppGlobal;
 import com.example.grocerieslist.utilities.CircleTransform;
+import com.example.grocerieslist.utilities.Constant;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputEditText;
+
+import java.util.Calendar;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -33,7 +59,11 @@ import androidx.fragment.app.FragmentTransaction;
  * Created by Tejaswi on 22/07/21.
  */
 public class SlidingMenu extends AppCompatActivity {
+    private static final int PICKFILE_REQUEST_CODE = 1;
+    private static final int PICKFILE_REQUEST_CODE_CUST = 2;
+    private static final int PICKFILE_REQUEST_CODE_STOCK = 3;
 
+    String TAG = SlidingMenu.class.getSimpleName();
     private NavigationView navigationView;
     private DrawerLayout drawer;
     private View navHeader;
@@ -42,21 +72,24 @@ public class SlidingMenu extends AppCompatActivity {
     private Toolbar toolbar;
     private FloatingActionButton fab;
 
-    // urls to load navigation header background image
-    // and profile image
-    private static final String urlNavHeaderBg = "http://api.androidhive.info/images/nav-menu-header-bg.jpg";
-    private static final String urlProfileImg = "https://lh3.googleusercontent.com/eCtE_G34M9ygdkmOpYvCag1vBARCmZwnVS6rS5t4JLzJ6QgQSBquM0nuTsCpLhYbKljoyS-txg";
+    AppGlobal global;
 
     // index to identify current nav menu item
     public static int navItemIndex = 0;
 
     // tags used to attach the fragments
-    private static final String TAG_HOME = "home";
-    private static final String TAG_PHOTOS = "photos";
-    private static final String TAG_MOVIES = "movies";
+    private static final String TAG_DASHBOARD = "dashboard";
+    private static final String TAG_PRICELIST = "pricelist";
+    private static final String TAG_FILTER = "filter";
     private static final String TAG_NOTIFICATIONS = "notifications";
+    private static final String TAG_PRODUCTSTOCK = "productstock";
     private static final String TAG_SETTINGS = "settings";
-    public static String CURRENT_TAG = TAG_HOME;
+    private static final String TAG_CUSTOMER = "customer";
+    private static final String TAG_STORAGELOCATION = "storagelocation";
+    private static final String TAG_PICKUP_PERSON = "pickupperson";
+    private static final String TAG_COMPANY = "company";
+    private static final String TAG_PRODUCT = "products";
+    public static String CURRENT_TAG = TAG_DASHBOARD;
 
     // toolbar titles respected to selected nav menu item
     private String[] activityTitles;
@@ -74,7 +107,7 @@ public class SlidingMenu extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         mHandler = new Handler();
-
+        global = new AppGlobal(this);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -92,8 +125,36 @@ public class SlidingMenu extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+
+                if(CURRENT_TAG.equals(TAG_PRODUCT)){
+                    importData(Constant.PRODUCT);
+                }else if(CURRENT_TAG.equals(TAG_COMPANY)){
+                    Snackbar.make(view, "Replace with your own action "+CURRENT_TAG, Snackbar.LENGTH_LONG).show();
+                }else if(CURRENT_TAG.equals(TAG_STORAGELOCATION)){
+                    dialogCreate(Constant.PLACE);
+                }else if(CURRENT_TAG.equals(TAG_PICKUP_PERSON)){
+                    dialogCreate(Constant.PERSON);
+                }else if(CURRENT_TAG.equals(TAG_CUSTOMER)){
+                    importData(Constant.CUSTOMER);
+                }else if(CURRENT_TAG.equals(TAG_PRODUCTSTOCK)){
+                    Intent newSales = new Intent(SlidingMenu.this,ProductStock.class);
+                    startActivity(newSales);
+                }else{
+                    Snackbar.make(view, "Replace with your own action "+CURRENT_TAG, Snackbar.LENGTH_LONG)
+                            .setAction("Action", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    Calendar c = Calendar.getInstance();
+                                    String msg = "Eashwar Traders goods details of "+c.get(Calendar.DATE)+"/"+(c.get(Calendar.MONTH)+1)+" "+c.get(Calendar.HOUR_OF_DAY)+":"+c.get(Calendar.MINUTE);
+                                    msg = msg +"\n"+"--------------------------------------------------------------------------------";
+                                    msg = msg +"\nName"+"          "+"Type"+"          "+"Quantity"+"          "+"          "+"Remark";
+                                    msg = msg +String.format("%20s %20s \r\n", "column 1", "column 2");
+                                    msg = msg +String.format("%20s %20s \r\n", "comn 1", "clmn 2");
+                                    msg = msg +"\n"+"--------------------------------------------------------------------------------";
+                                    global.sendWhatsApp(msg);
+                                }
+                            }).show();
+                }
             }
         });
 
@@ -105,8 +166,175 @@ public class SlidingMenu extends AppCompatActivity {
 
         if (savedInstanceState == null) {
             navItemIndex = 0;
-            CURRENT_TAG = TAG_HOME;
+            CURRENT_TAG = TAG_DASHBOARD;
             loadHomeFragment();
+        }
+    }
+
+    public void dialogCreate(final String type){
+        final Dialog dialog = new Dialog(SlidingMenu.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.createstockdetails);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        TextView title = dialog.findViewById(R.id.csd_title);
+        final TextInputEditText name = dialog.findViewById(R.id.csd_name);
+        final TextInputEditText desc = dialog.findViewById(R.id.csd_desc);
+        final Spinner status = dialog.findViewById(R.id.csd_status);
+        CardView save = dialog.findViewById(R.id.csd_save);
+        CardView cancel = dialog.findViewById(R.id.csd_cancel);
+
+        title.setText("Create "+type);
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String nameStr = name.getText().toString().trim();
+                String descStr = desc.getText().toString().trim();
+                String statusStr = String.valueOf(status.getSelectedItem());
+
+                if(!nameStr.isEmpty()){
+                    StockDetailsClass sdc = new StockDetailsClass(nameStr,descStr,type,statusStr,"");
+                    StockDetailsAccess sda = new StockDetailsAccess(SlidingMenu.this);
+                    sda.open();
+                    sda.addStockDetails(sdc);
+                    sda.close();
+
+                    dialog.dismiss();
+
+                    Toast.makeText(getApplicationContext(),"Successfully added...",Toast.LENGTH_SHORT).show();
+                    loadHomeFragment();
+                }
+            }
+        });
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+
+
+
+    public void importCusotmer(){
+        AlertDialog.Builder builderSingle = new AlertDialog.Builder(SlidingMenu.this);
+        builderSingle.setIcon(R.mipmap.logo);
+        builderSingle.setTitle("Select any one:-");
+
+        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(SlidingMenu.this, android.R.layout.select_dialog_item);
+        arrayAdapter.add(Constant.IMPORT+" "+Constant.CUSTOMER);
+        arrayAdapter.add(Constant.CREATE+" "+Constant.CUSTOMER);
+
+        builderSingle.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String strName = arrayAdapter.getItem(which);
+                if(strName.equals(Constant.IMPORT+" "+Constant.CUSTOMER)){
+                    Intent mRequestFileIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                    mRequestFileIntent.setType("text/*");
+                    startActivityForResult(mRequestFileIntent, PICKFILE_REQUEST_CODE_CUST);
+                }
+
+            }
+        });
+        builderSingle.show();
+    }
+
+    public void importData(final String cmd){
+        AlertDialog.Builder builderSingle = new AlertDialog.Builder(SlidingMenu.this);
+        builderSingle.setIcon(R.mipmap.logo);
+        builderSingle.setTitle("Select any one:-");
+
+        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(SlidingMenu.this, android.R.layout.select_dialog_item);
+        arrayAdapter.add(Constant.IMPORT+" "+cmd);
+        arrayAdapter.add(Constant.CREATE+" "+cmd);
+
+        builderSingle.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String strName = arrayAdapter.getItem(which);
+                if(strName.equals(Constant.IMPORT+" "+cmd)){
+                    Intent mRequestFileIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                    mRequestFileIntent.setType("text/*");
+                    if(cmd.equals(Constant.CUSTOMER))
+                        startActivityForResult(mRequestFileIntent, PICKFILE_REQUEST_CODE_CUST);
+                    else if(cmd.equals(Constant.PRODUCT))
+                        startActivityForResult(mRequestFileIntent, PICKFILE_REQUEST_CODE);
+                    else if(cmd.equals(Constant.STOCK))
+                        startActivityForResult(mRequestFileIntent, PICKFILE_REQUEST_CODE_STOCK);
+                }
+
+            }
+        });
+        builderSingle.show();
+    }
+
+    public void importProduct(){
+        AlertDialog.Builder builderSingle = new AlertDialog.Builder(SlidingMenu.this);
+        builderSingle.setIcon(R.mipmap.logo);
+        builderSingle.setTitle("Select any one:-");
+
+        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(SlidingMenu.this, android.R.layout.select_dialog_item);
+        arrayAdapter.add(Constant.IMPORT+" "+Constant.PRODUCT);
+        arrayAdapter.add(Constant.CREATE+" "+Constant.PRODUCT);
+
+        builderSingle.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String strName = arrayAdapter.getItem(which);
+                if(strName.equals(Constant.IMPORT+" "+Constant.CUSTOMER)){
+                    Intent mRequestFileIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                    mRequestFileIntent.setType("text/*");
+                    startActivityForResult(mRequestFileIntent, PICKFILE_REQUEST_CODE_CUST);
+                }
+
+            }
+        });
+        builderSingle.show();
+    }
+
+    @SuppressLint("MissingSuperCall")
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        if (requestCode == PICKFILE_REQUEST_CODE) {
+            String path = data.getData().getPath();
+            Log.i(TAG, "PATH IS " +path);
+            ProcessDataAsync pda = new ProcessDataAsync(path,SlidingMenu.this,data);
+            pda.execute();
+            global.setPreference(global.App_Product_Path,path, Constant.Pref_String,null);
+        }else if (requestCode == PICKFILE_REQUEST_CODE_CUST) {
+            String path = data.getData().getPath();
+            Log.i(TAG, "PATH IS " +path);
+            ProcessCustAsync pda = new ProcessCustAsync(path,SlidingMenu.this,data);
+            pda.execute();
+            global.setPreference(global.App_Customer_Path,path, Constant.Pref_String,null);
+        }else if (requestCode == PICKFILE_REQUEST_CODE_STOCK) {
+            String path = data.getData().getPath();
+            Log.i(TAG, "PATH IS " +path);
+            ProcessStockAsync pda = new ProcessStockAsync(path,SlidingMenu.this,data);
+            pda.execute();
+            global.setPreference(global.App_Stock_Path,path, Constant.Pref_String,null);
         }
     }
 
@@ -117,17 +345,17 @@ public class SlidingMenu extends AppCompatActivity {
      */
     private void loadNavHeader() {
         // name, website
-        txtName.setText("Ravi Tamada");
-        txtWebsite.setText("www.androidhive.info");
+        txtName.setText(String.valueOf(global.getPreference(global.App_Username)));
+        txtWebsite.setText(String.valueOf(global.getPreference(global.App_WhatsApp_Number)));
 
         // loading header background image
-        Glide.with(this).load(urlNavHeaderBg)
+        Glide.with(this).load(R.drawable.sales_background)
                 .crossFade()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(imgNavHeaderBg);
 
         // Loading profile image
-        Glide.with(this).load(urlProfileImg)
+        Glide.with(this).load(R.mipmap.logo)
                 .crossFade()
                 .thumbnail(0.5f)
                 .bitmapTransform(new CircleTransform(this))
@@ -143,30 +371,18 @@ public class SlidingMenu extends AppCompatActivity {
      * selected from navigation menu
      */
     private void loadHomeFragment() {
-        // selecting appropriate nav menu item
         selectNavMenu();
-
-        // set toolbar title
         setToolbarTitle();
 
-        // if user select the current navigation menu again, don't do anything
-        // just close the navigation drawer
         if (getSupportFragmentManager().findFragmentByTag(CURRENT_TAG) != null) {
             drawer.closeDrawers();
-
-            // show or hide the fab button
             toggleFab();
             return;
         }
 
-        // Sometimes, when fragment has huge data, screen seems hanging
-        // when switching between navigation menus
-        // So using runnable, the fragment is loaded with cross fade effect
-        // This effect can be seen in GMail app
         Runnable mPendingRunnable = new Runnable() {
             @Override
             public void run() {
-                // update the main content by replacing fragments
                 Fragment fragment = getHomeFragment();
                 FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
@@ -194,28 +410,38 @@ public class SlidingMenu extends AppCompatActivity {
     private Fragment getHomeFragment() {
         switch (navItemIndex) {
             case 0:
-                // home
-                HomeFragment homeFragment = new HomeFragment();
+                DashboardFragment homeFragment = new DashboardFragment();
                 return homeFragment;
             case 1:
-                // photos
-                PriceListFragment photosFragment = new PriceListFragment();
-                return photosFragment;
+                ProductFragment productFragment = new ProductFragment();
+                return productFragment;
             case 2:
-                // movies fragment
-                FilterFragment moviesFragment = new FilterFragment();
-                return moviesFragment;
+                CustomerFragment customerFragment = new CustomerFragment();
+                return customerFragment;
             case 3:
-                // notifications fragment
-                NotificationsFragment notificationsFragment = new NotificationsFragment();
-                return notificationsFragment;
-
+                CompanyFragment companyFragment = new CompanyFragment();
+                return companyFragment;
             case 4:
-                // settings fragment
-                ProductStockFragment settingsFragment = new ProductStockFragment();
+                LocationFragment locationFragment = new LocationFragment();
+                return locationFragment;
+                /*FilterFragment photosFragment = new FilterFragment();
+                return photosFragment;*/
+            case 5:
+                ProductStockFragment productStockFragment = new ProductStockFragment();
+                return productStockFragment;
+                /*NotificationsFragment notificationsFragment = new NotificationsFragment();
+                return notificationsFragment;*/
+            case 6:
+                PriceListFragment moviesFragment = new PriceListFragment();
+                return moviesFragment;
+            case 7:
+                PickUpPersonFragment pickUpPersonFragment = new PickUpPersonFragment();
+                return pickUpPersonFragment;
+            case 8:
+                SettingsFragment settingsFragment = new SettingsFragment();
                 return settingsFragment;
             default:
-                return new HomeFragment();
+                return new DashboardFragment();
         }
     }
 
@@ -235,37 +461,59 @@ public class SlidingMenu extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
 
+                /**
+                 * 0-- DashBoard                4-- Storage Location        8-- Settings
+                 * 1-- Products                 5-- Product Stock           9--
+                 * 2-- Customer                 6-- Price List              10-
+                 * 3-- Company                  7-- Pick Up Person          11-
+                 */
                 //Check to see which item was being clicked and perform appropriate action
                 switch (menuItem.getItemId()) {
                     //Replacing the main content with ContentFragment Which is our Inbox View;
-                    case R.id.home:
+                    case R.id.nav_dashboard:
                         navItemIndex = 0;
-                        CURRENT_TAG = TAG_HOME;
+                        CURRENT_TAG = TAG_DASHBOARD;
                         break;
-                    case R.id.nav_photos:
+                    case R.id.nav_product:
                         navItemIndex = 1;
-                        CURRENT_TAG = TAG_PHOTOS;
+                        CURRENT_TAG = TAG_PRODUCT;
                         break;
-                    case R.id.nav_movies:
+                    case R.id.nav_customer:
                         navItemIndex = 2;
-                        CURRENT_TAG = TAG_MOVIES;
+                        CURRENT_TAG = TAG_CUSTOMER;
                         break;
-                    case R.id.nav_notifications:
+                    case R.id.nav_company:
                         navItemIndex = 3;
-                        CURRENT_TAG = TAG_NOTIFICATIONS;
+                        CURRENT_TAG = TAG_COMPANY;
+                        break;
+                    case R.id.nav_storage_location:
+                        navItemIndex = 4;
+                        CURRENT_TAG = TAG_STORAGELOCATION;
+                        break;
+                    case R.id.nav_produt_stock:
+                        navItemIndex = 5;
+                        CURRENT_TAG = TAG_PRODUCTSTOCK;
+                        break;
+                    case R.id.nav_pricelist:
+                        navItemIndex = 6;
+                        CURRENT_TAG = TAG_PRICELIST;
+                        break;
+                    case R.id.nav_pickup_person:
+                        navItemIndex = 7;
+                        CURRENT_TAG = TAG_PICKUP_PERSON;
                         break;
                     case R.id.nav_settings:
-                        navItemIndex = 4;
+                        navItemIndex = 8;
                         CURRENT_TAG = TAG_SETTINGS;
                         break;
                     case R.id.nav_about_us:
                         // launch new intent instead of loading fragment
-                        startActivity(new Intent(SlidingMenu.this, AboutUsActivity.class));
+                        startActivity(new Intent(SlidingMenu.this, Dashboard.class));
                         drawer.closeDrawers();
                         return true;
                     case R.id.nav_privacy_policy:
                         // launch new intent instead of loading fragment
-                        startActivity(new Intent(SlidingMenu.this, PrivacyPolicyActivity.class));
+                        startActivity(new Intent(SlidingMenu.this, MainActivity.class));
                         drawer.closeDrawers();
                         return true;
                     default:
@@ -323,12 +571,11 @@ public class SlidingMenu extends AppCompatActivity {
             // rather than home
             if (navItemIndex != 0) {
                 navItemIndex = 0;
-                CURRENT_TAG = TAG_HOME;
+                CURRENT_TAG = TAG_DASHBOARD;
                 loadHomeFragment();
                 return;
             }
         }
-
         super.onBackPressed();
     }
 
@@ -379,9 +626,11 @@ public class SlidingMenu extends AppCompatActivity {
 
     // show or hide the fab
     private void toggleFab() {
-        if (navItemIndex == 0)
+        if (navItemIndex == 0 || navItemIndex == 1 || navItemIndex == 2 ||
+                navItemIndex == 3 || navItemIndex == 4 || navItemIndex == 7)
             fab.show();
         else
             fab.hide();
     }
+
 }

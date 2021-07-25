@@ -1,9 +1,7 @@
 package com.example.grocerieslist.init;
 
 import android.annotation.SuppressLint;
-import android.app.ActionBar;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -12,17 +10,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.grocerieslist.R;
-import com.example.grocerieslist.db.product.ProductAccess;
-import com.example.grocerieslist.db.product.ProductClass;
 import com.example.grocerieslist.utilities.AppGlobal;
 import com.example.grocerieslist.utilities.Constant;
-import com.example.grocerieslist.utilities.ProcessDataAsync;
+import com.example.grocerieslist.background.ProcessDataAsync;
 import com.google.android.material.snackbar.Snackbar;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -46,9 +37,6 @@ public class SettingsPage extends AppCompatActivity {
 
         appGlobal = new AppGlobal(this);
 
-
-/*        ActionBar actionBar = getActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);*/
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 

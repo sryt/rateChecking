@@ -1,4 +1,4 @@
-package com.example.grocerieslist.utilities;
+package com.example.grocerieslist.background;
 
 import android.Manifest;
 import android.app.Activity;
@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.example.grocerieslist.db.product.ProductAccess;
 import com.example.grocerieslist.db.product.ProductClass;
+import com.example.grocerieslist.utilities.Constant;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -132,7 +133,7 @@ public class ProcessDataAsync extends AsyncTask<Void,Void,Void> {
                            String gst,String hsn,String uom,String type,String group,String desc){
         ProductClass pc1 = new ProductClass(name,desc,String.valueOf(System.currentTimeMillis()),"","",
                 uom,"",mrp,pPrice,cPrice,wPrice,rPrice,caseQty,sheet,
-                gst,hsn,type, group,Constant.ACTIVE);
+                gst,hsn,type, group, Constant.ACTIVE);
 
         Log.i(TAG,"saving class "+pc1.toString());
         ProductAccess pa = new ProductAccess(act);

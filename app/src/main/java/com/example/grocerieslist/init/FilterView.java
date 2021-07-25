@@ -28,7 +28,7 @@ public class FilterView extends AppCompatActivity {
     ExpandableListAdapter listAdapter;
     ExpandableListView expListView;
     List<HashMap<String,String>> listDataHeader;
-    HashMap<HashMap<String,String>, List<String>> listDataChild;
+    HashMap<HashMap<String,String>, List<ProductClass>> listDataChild;
 
     List<String> filterHeader;
     List<ProductClass> pcs;
@@ -99,7 +99,7 @@ public class FilterView extends AppCompatActivity {
                 headMap.put("name",groupName);
                 headMap.put("value",String.valueOf(pcs.size()));
                 listDataHeader.add(headMap);
-                listDataChild.put(listDataHeader.get(i),nowAdd);
+                listDataChild.put(listDataHeader.get(i),pcs);
 
             }
         }

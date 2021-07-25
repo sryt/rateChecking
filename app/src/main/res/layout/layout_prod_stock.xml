@@ -49,11 +49,40 @@
                 android:id="@+id/lcs_remark"
                 android:layout_height="wrap_content"/>
         </com.google.android.material.textfield.TextInputLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/lcs_remark_lay"
+            android:id="@+id/lcs_details_lay"
+            android:orientation="horizontal">
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:layout_weight="0.5"
+                android:hint="@string/sa_remark">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:inputType="textCapSentences"
+                    android:layout_height="wrap_content"/>
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:layout_weight="0.5"
+                android:hint="@string/sa_remark">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:inputType="textCapSentences"
+                    android:layout_height="wrap_content"/>
+            </com.google.android.material.textfield.TextInputLayout>z
+        </LinearLayout>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/lcs_types"
-            android:layout_below="@+id/lcs_remark_lay"
+            android:layout_below="@+id/lcs_details_lay"
             android:text="@string/cust_type"/>
         <RadioGroup
             android:layout_width="match_parent"

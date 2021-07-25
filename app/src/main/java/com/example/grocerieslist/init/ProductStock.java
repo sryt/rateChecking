@@ -125,18 +125,25 @@ public class ProductStock extends AppCompatActivity {
                 CustomerClass cc = ca.getCustomerDetailsByName(cust);
                 ca.close();
                 if(itemsList.getChildCount() > 0){
+                    Calendar c = Calendar.getInstance();
+                    String msg = "Eashwar Traders goods details of "+c.get(Calendar.DATE)+"/"+(c.get(Calendar.MONTH)+1)+" "+c.get(Calendar.HOUR_OF_DAY)+":"+c.get(Calendar.MINUTE);
+                    msg = msg +"\n"+"--------------------------------------------------------------------------------";
+                    msg = msg +"\nName"+"&#160;&#160;&#160;&#160;&#160;"+"Type"+"          "+"Quantity"+"          "+"          "+"Remark";
                     for(int i=0;i<itemsList.getChildCount();i++){
                         LinearLayout ll = (LinearLayout) itemsList.getChildAt(i);
                         MaterialAutoCompleteTextView txt = ll.findViewById(R.id.li_prodname);
                         TextInputEditText qty = ll.findViewById(R.id.li_prodqty);
                         Log.i(TAG,"name is "+txt.getText().toString().trim()+"/qty is "+qty.getText().toString().trim());
 
-                        StockClass psc = new StockClass(txt.getText().toString().trim(),cc.getId(),ts,type,qty.getText().toString().trim(),remarkStr);
+                        StockClass psc = new StockClass(txt.getText().toString().trim(),cc.getId(),"","",ts,type,qty.getText().toString().trim(),remarkStr);
                         Log.i(TAG,"class value is "+psc.toString());
                         psa.open();
                         psa.addProductStockDetails(psc);
                         psa.close();
+                        msg = msg +"\n"+psc.getProName()+"          "+psc.getType()+"          "+psc.getQty()+"          "+psc.getRemark();
                     }
+                    msg = msg +"\n"+"--------------------------------------------------------------------------------";
+                    global.sendWhatsApp(msg);
                 }
                 onBackPressed();
             }

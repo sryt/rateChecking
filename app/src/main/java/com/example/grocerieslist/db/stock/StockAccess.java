@@ -41,6 +41,8 @@ public class StockAccess {
         values.put(StockDB.KEY_NAME,prod.getProName());
         values.put(StockDB.KEY_TS,prod.getTs());
         values.put(StockDB.KEY_CUST_ID,prod.getCustId());
+        values.put(StockDB.KEY_LOCATION_ID,prod.getLocationId());
+        values.put(StockDB.KEY_PERSON_ID,prod.getPersonId());
         values.put(StockDB.KEY_TYPE,prod.getType());
         values.put(StockDB.KEY_QTY,prod.getQty());
         values.put(StockDB.KEY_REMARK,prod.getRemark());
@@ -192,6 +194,8 @@ public class StockAccess {
                 cursor.getString(cursor.getColumnIndex(StockDB.KEY_ID)),
                 cursor.getString(cursor.getColumnIndex(StockDB.KEY_NAME)),
                 cursor.getString(cursor.getColumnIndex(StockDB.KEY_CUST_ID)),
+                cursor.getString(cursor.getColumnIndex(StockDB.KEY_LOCATION_ID)),
+                cursor.getString(cursor.getColumnIndex(StockDB.KEY_PERSON_ID)),
                 cursor.getString(cursor.getColumnIndex(StockDB.KEY_TS)),
                 cursor.getString(cursor.getColumnIndex(StockDB.KEY_TYPE)),
                 cursor.getString(cursor.getColumnIndex(StockDB.KEY_QTY)),

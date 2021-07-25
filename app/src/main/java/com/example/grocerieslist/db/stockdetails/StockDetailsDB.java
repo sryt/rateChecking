@@ -1,4 +1,4 @@
-package com.example.grocerieslist.db.stock;
+package com.example.grocerieslist.db.stockdetails;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -7,40 +7,33 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.example.grocerieslist.utilities.Constant;
 
 /**
- * Created by Tejaswi on 22/07/21.
+ * Created by Tejaswi on 24/07/21.
  */
-public class StockDB extends SQLiteOpenHelper {
+public class StockDetailsDB extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
-    private static final String DATABASE_NAME = Constant.DB_Stock;
-    public static final String TABLE = "prodcutstock";
+    private static final String DATABASE_NAME = Constant.DB_Stock_Details;
+    public static final String TABLE = "place";
     public static final String KEY_ID = "id";
     public static final String KEY_NAME = "name";
-    public static final String KEY_CUST_ID = "custId";
-    public static final String KEY_LOCATION_ID = "locationId";
-    public static final String KEY_PERSON_ID = "personId";
-    public static final String KEY_TS = "ts";
+    public static final String KEY_DESC = "descripton";
     public static final String KEY_TYPE = "type";
-    public static final String KEY_QTY = "qty";
-    public static final String KEY_REMARK = "remark";
+    public static final String KEY_STATUS = "status";
+    public static final String KEY_FLAG = "flag";
 
-    public StockDB(Context context) {
+    public StockDetailsDB(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         //3rd argument to be passed is CursorFactory instance
     }
-
     // Creating Tables
     @Override
     public void onCreate(SQLiteDatabase db) {
         String CREATE_TABLE = "CREATE TABLE " + TABLE + "("
                 + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL ,"
                 + KEY_NAME + " TEXT,"
-                + KEY_CUST_ID + " TEXT,"
-                + KEY_LOCATION_ID + " TEXT,"
-                + KEY_PERSON_ID + " TEXT,"
-                + KEY_TS + " TEXT,"
-                + KEY_QTY + " TEXT,"
+                + KEY_DESC + " TEXT,"
                 + KEY_TYPE + " TEXT,"
-                + KEY_REMARK + " TEXT" + ")";
+                + KEY_STATUS + " TEXT,"
+                + KEY_FLAG + " TEXT" + ")";
         db.execSQL(CREATE_TABLE);
     }
 

@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <TextView
@@ -28,10 +29,25 @@
         android:background="@color/colorAccent"
         android:layout_height="1dp"/>
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/sl_import_data"
+        android:layout_margin="@dimen/fab_margin"
+        app:helperText="@string/imposrtDataD"
+        android:hint="@string/importData">
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:text="@string/imposrtDataD"
+            android:background="@android:color/transparent"/>
+    </com.google.android.material.textfield.TextInputLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/sl_import_lv"
+        android:visibility="gone"
         android:orientation="vertical">
         <TextView
             android:layout_width="match_parent"
@@ -57,10 +73,24 @@
         android:background="@color/colorAccent"
         android:layout_height="1dp"/>
 
-    <LinearLayout
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/sl_export_data"
+        android:layout_margin="@dimen/fab_margin"
+        android:hint="@string/exportData">
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:text="@string/exportDataD"
+            android:background="@android:color/transparent"/>
+    </com.google.android.material.textfield.TextInputLayout>
+    <!--<LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/sl_company_lv"
+        android:visibility="gone"
         android:orientation="vertical">
         <TextView
             android:layout_width="match_parent"
@@ -80,7 +110,7 @@
             android:textStyle="italic"
             android:paddingBottom="@dimen/fab_margin"
             android:text="@string/companyDesc"/>
-    </LinearLayout>
+    </LinearLayout>-->
     <FrameLayout
         android:layout_width="match_parent"
         android:background="@color/colorAccent"

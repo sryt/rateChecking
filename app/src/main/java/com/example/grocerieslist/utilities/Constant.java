@@ -28,6 +28,24 @@ public class Constant {
     public static String POST = "POST";
     public static String GET = "GET";
 
+    public static String NO_DATA = "No Data.....";
+    public static String PLACE = "PLACE";
+    public static String PERSON = "PERSON";
+
+    public static String EXPORT = "EXPORT";
+    public static String IMPORT = "IMPORT";
+    public static String CREATE = "CREATE";
+
+    public static String CUSTOMER = "CUSTOMER";
+    public static String PRODUCT = "PRODUCTS";
+    public static String STOCK = "STOCK";
+
+    public static String PASSING = "PASSING";
+
+    public static String VIEW = "VIEW";
+    public static String EDIT = "EDIT";
+    public static String NEW = "NEW";
+
     public static String Groceries = "Groceries";
     public static String Snacks = "Snacks";
     public static String Beauty_Products = "Cleaning";
@@ -95,6 +113,7 @@ public class Constant {
     public static String DB_Group = "ee_group";
     public static String DB_HSN = "ee_hsn";
     public static String DB_Product = "ee";
+    public static String DB_Stock_Details = "ee_stock_details";
     public static String DB_User = "ee_user";
     public static String DB_Cart = "ee_cart";
     public static String DB_Sales = "ee_sales";

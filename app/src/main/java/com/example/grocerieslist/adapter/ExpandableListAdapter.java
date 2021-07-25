@@ -9,6 +9,7 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
 import com.example.grocerieslist.R;
+import com.example.grocerieslist.db.product.ProductClass;
 
 import java.util.HashMap;
 import java.util.List;
@@ -20,10 +21,10 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     private Context _context;
     private List<HashMap<String,String>> _listDataHeader; // header titles
     // child data in format of header title, child title
-    private HashMap<HashMap<String,String>, List<String>> _listDataChild;
+    private HashMap<HashMap<String,String>, List<ProductClass>> _listDataChild;
 
     public ExpandableListAdapter(Context context, List<HashMap<String,String>> listDataHeader,
-                                 HashMap<HashMap<String,String>, List<String>> listChildData) {
+                                 HashMap<HashMap<String,String>, List<ProductClass>> listChildData) {
         this._context = context;
         this._listDataHeader = listDataHeader;
         this._listDataChild = listChildData;
@@ -44,18 +45,25 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     public View getChildView(int groupPosition, final int childPosition,
                              boolean isLastChild, View convertView, ViewGroup parent) {
 
-        final String childText = (String) getChild(groupPosition, childPosition);
+        final ProductClass ct = (ProductClass) getChild(groupPosition, childPosition);
 
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this._context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = infalInflater.inflate(R.layout.list_item, null);
+            convertView = infalInflater.inflate(R.layout.pricedetials, null);
         }
 
-        TextView txtListChild = (TextView) convertView
-                .findViewById(R.id.lblListItem);
+        TextView name = convertView.findViewById(R.id.pd_name);
+        TextView crate =  convertView.findViewById(R.id.pd_cPrice);
+        TextView wrate =  convertView.findViewById(R.id.pd_wPrice);
+        TextView srate =  convertView.findViewById(R.id.pd_rPrice);
+        TextView mrp = convertView.findViewById(R.id.pd_mPrice);
 
-        txtListChild.setText(childText);
+        name.setText(ct.getName());
+        crate.setText(ct.getCost());
+        wrate.setText(ct.getSpecial());
+        srate.setText(ct.getRetail());
+        mrp.setVisibility(View.INVISIBLE);
         return convertView;
     }
 

@@ -1,110 +1,182 @@
 package com.example.grocerieslist.fragment;
 
-import android.content.Context;
-import android.net.Uri;
+import android.app.Dialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.example.grocerieslist.R;
+import com.example.grocerieslist.adapter.PriceDetailsAdapter;
+import com.example.grocerieslist.db.product.ProductAccess;
+import com.example.grocerieslist.db.product.ProductClass;
+import com.example.grocerieslist.utilities.AppGlobal;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 import androidx.fragment.app.Fragment;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link PriceListFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class PriceListFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    private OnFragmentInteractionListener mListener;
+    String TAG = PriceListFragment.class.getSimpleName();
+    AppGlobal global;
+    ListView lv;
+    SearchView txt;
+    Button filterBtn;
+    PriceDetailsAdapter priceDetailsAdapter;
+    List<ProductClass> pcs;
+    List<String> proNameFilter;
+    List<ProductClass> pcFilter;
 
     public PriceListFragment() {
         // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment PhotosFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static PriceListFragment newInstance(String param1, String param2) {
-        PriceListFragment fragment = new PriceListFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_photos, container, false);
+        View rootView = inflater.inflate(R.layout.pricelayout, container, false);
+        global = new AppGlobal(getActivity());
+
+        lv = rootView.findViewById(R.id.listview);
+        txt = rootView.findViewById(R.id.search);
+        filterBtn = rootView.findViewById(R.id.filter);
+        return rootView;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        getProductName();
+
+        priceDetailsAdapter = new PriceDetailsAdapter(getActivity(),R.layout.pricedetials,pcs);
+
+        txt.setQueryHint("Search over "+pcs.size());
+        priceDetailsAdapter.sort(new Comparator<ProductClass>() {
+            @Override
+            public int compare(ProductClass lhs, ProductClass rhs) {
+                return lhs.getName().compareTo(rhs.getName());
+            }
+        });
+        lv.setAdapter(priceDetailsAdapter);
+
+        txt.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                searchFlow(s);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                searchFlow(s);
+                return false;
+            }
+        });
+
+        filterBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Dialog dialog = new Dialog(getActivity());
+                dialog.setContentView(R.layout.homefragment);
+
+                dialog.setTitle("Select the category.");
+                SearchView searchView = dialog.findViewById(R.id.search);
+                searchView.setVisibility(View.GONE);
+
+                ListView lv = dialog.findViewById(R.id.listview);
+
+                ProductAccess pa = new ProductAccess(getActivity());
+                pa.open();
+                final List<String> category = pa.getProdCatagoryDetails();
+                pa.close();
+
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),android.R.layout.simple_list_item_1,category);
+                lv.setAdapter(adapter);
+
+                adapter.sort(new Comparator<String>() {
+                    @Override
+                    public int compare(String lhs, String rhs) {
+                        return lhs.compareTo(rhs);
+                    }
+                });
+
+                lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        rearrangeList(category.get(i));
+                        dialog.dismiss();
+                    }
+                });
+
+                dialog.show();
+            }
+        });
+    }
+
+    public void rearrangeList(String str){
+        pcs = new ArrayList<>();
+        Toast.makeText(getActivity(),"Selected category is "+str,Toast.LENGTH_SHORT).show();
+
+        ProductAccess pa = new ProductAccess(getActivity());
+        pa.open();
+        pcs = pa.getProdCatagoryDetails(str);
+        pa.close();
+
+        for(int i=0;i<pcs.size();i++)
+            Log.i(TAG,i+" "+pcs.get(i).getName());
+
+        priceDetailsAdapter = new PriceDetailsAdapter(getActivity(),R.layout.pricedetials,pcs);
+        priceDetailsAdapter.sort(new Comparator<ProductClass>() {
+            @Override
+            public int compare(ProductClass lhs, ProductClass rhs) {
+                return lhs.getName().compareTo(rhs.getName());
+            }
+        });
+        lv.setAdapter(priceDetailsAdapter);
+    }
+
+    boolean filterFlag = false;
+    public void searchFlow(String s){
+        filterFlag = true;
+        pcFilter = new ArrayList<>();
+        proNameFilter = new ArrayList<>();
+        for(ProductClass pc : pcs){
+            if(pc.getName().toLowerCase().contains(s.toLowerCase())){
+                pcFilter.add(pc);
+                proNameFilter.add(pc.getName());
+            }
         }
+
+        priceDetailsAdapter = new PriceDetailsAdapter(getActivity(),R.layout.pricedetials,pcFilter);
+        priceDetailsAdapter.sort(new Comparator<ProductClass>() {
+            @Override
+            public int compare(ProductClass lhs, ProductClass rhs) {
+                return lhs.getName().compareTo(rhs.getName());
+            }
+        });
+        lv.setAdapter(priceDetailsAdapter);
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
+    public void getProductName(){
+        ProductAccess pa = new ProductAccess(getActivity());
+
+        pa.open();
+        pcs = pa.getProdDetails();
+        pa.close();
+
+        Log.i(TAG,"product list size is "+pcs.size());
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
 }

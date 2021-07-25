@@ -3,27 +3,45 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_home"
-            android:icon="@drawable/outline_more_horiz_24"
-            android:title="@string/nav_home" />
+            android:id="@+id/nav_dashboard"
+            android:icon="@drawable/outline_dashboard_24"
+            android:title="@string/nav_dashboard" />
         <item
-            android:id="@+id/nav_photos"
-            android:icon="@drawable/outline_store_24"
-            android:title="@string/nav_photos" />
-        <item
-            android:id="@+id/nav_movies"
+            android:id="@+id/nav_product"
             android:icon="@drawable/outline_shopping_cart_24"
-            android:title="@string/nav_movies" />
+            android:title="@string/nav_product" />
+        <item
+            android:id="@+id/nav_customer"
+            android:icon="@drawable/outline_manage_accounts_24"
+            android:title="@string/nav_customer" />
 
         <item
-            android:id="@+id/nav_notifications"
-            android:icon="@drawable/outline_local_offer_24"
-            android:title="@string/nav_notifications" />
+            android:id="@+id/nav_company"
+            android:icon="@drawable/outline_store_24"
+            android:title="@string/nav_company" />
 
+        <item
+            android:id="@+id/nav_storage_location"
+            android:icon="@drawable/outline_location_on_24"
+            android:title="@string/nav_storage_location" />
+
+        <item
+            android:id="@+id/nav_produt_stock"
+            android:icon="@drawable/outline_inventory_2_24"
+            android:title="@string/nav_product_stock" />
+        <item
+            android:id="@+id/nav_pricelist"
+            android:icon="@drawable/outline_format_list_bulleted_24"
+            android:title="@string/nav_price_list" />
+        <item
+            android:id="@+id/nav_pickup_person"
+            android:icon="@drawable/outline_accessibility_24"
+            android:title="@string/nav_pick_up_person" />
         <item
             android:id="@+id/nav_settings"
-            android:icon="@drawable/outline_filter_list_24"
+            android:icon="@drawable/outline_settings_24"
             android:title="@string/nav_settings" />
+
     </group>
 
     <item android:title="Other">

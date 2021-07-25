@@ -7,6 +7,8 @@ public class StockClass {
     String id;
     String proName;
     String custId;
+    String locationId;
+    String personId;
     String ts;
     String type;
     String qty;
@@ -15,19 +17,23 @@ public class StockClass {
     public StockClass() {
     }
 
-    public StockClass(String proName, String custId, String ts, String type, String qty, String remark) {
+    public StockClass(String proName, String custId, String locationId, String personId, String ts, String type, String qty, String remark) {
         this.proName = proName;
         this.custId = custId;
+        this.locationId = locationId;
+        this.personId = personId;
         this.ts = ts;
         this.type = type;
         this.qty = qty;
         this.remark = remark;
     }
 
-    public StockClass(String id, String proName, String custId, String ts, String type, String qty, String remark) {
+    public StockClass(String id, String proName, String custId, String locationId, String personId, String ts, String type, String qty, String remark) {
         this.id = id;
         this.proName = proName;
         this.custId = custId;
+        this.locationId = locationId;
+        this.personId = personId;
         this.ts = ts;
         this.type = type;
         this.qty = qty;
@@ -56,6 +62,22 @@ public class StockClass {
 
     public void setCustId(String custId) {
         this.custId = custId;
+    }
+
+    public String getLocationId() {
+        return locationId;
+    }
+
+    public void setLocationId(String locationId) {
+        this.locationId = locationId;
+    }
+
+    public String getPersonId() {
+        return personId;
+    }
+
+    public void setPersonId(String personId) {
+        this.personId = personId;
     }
 
     public String getTs() {
@@ -92,10 +114,12 @@ public class StockClass {
 
     @Override
     public String toString() {
-        return "ProductStockClass{" +
+        return "StockClass{" +
                 "id='" + id + '\'' +
                 ", proName='" + proName + '\'' +
                 ", custId='" + custId + '\'' +
+                ", locationId='" + locationId + '\'' +
+                ", personId='" + personId + '\'' +
                 ", ts='" + ts + '\'' +
                 ", type='" + type + '\'' +
                 ", qty='" + qty + '\'' +

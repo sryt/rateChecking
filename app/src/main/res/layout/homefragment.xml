@@ -10,8 +10,8 @@
         android:id="@+id/search"
         android:layout_margin="5dp"
         android:focusableInTouchMode="true"
-        android:drawableRight="@android:drawable/ic_menu_search"
-        android:hint="@string/app_name"/>
+        android:drawableRight="@android:drawable/ic_menu_search" />
+
     <ListView
         android:layout_width="match_parent"
         android:layout_below="@+id/search"
