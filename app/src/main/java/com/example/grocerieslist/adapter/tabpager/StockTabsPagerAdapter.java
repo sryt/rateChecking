@@ -2,8 +2,8 @@ package com.example.grocerieslist.adapter.tabpager;
 
 import android.content.Context;
 
-import com.example.grocerieslist.fragment.CurrentStockFragment;
-import com.example.grocerieslist.fragment.LatestStockFragment;
+import com.example.grocerieslist.fragment.stock.CurrentStockFragment;
+import com.example.grocerieslist.fragment.stock.LatestStockFragment;
 import com.example.grocerieslist.fragment.SettingsFragment;
 
 import androidx.fragment.app.Fragment;

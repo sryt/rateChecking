@@ -1,4 +1,4 @@
-package com.example.grocerieslist.fragment;
+package com.example.grocerieslist.fragment.product;
 
 import android.os.Bundle;
 import android.util.Log;

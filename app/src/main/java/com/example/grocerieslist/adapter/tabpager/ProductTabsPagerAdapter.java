@@ -2,20 +2,22 @@ package com.example.grocerieslist.adapter.tabpager;
 
 import android.content.Context;
 
-import com.example.grocerieslist.fragment.CurrentStockFragment;
-import com.example.grocerieslist.fragment.LatestStockFragment;
 import com.example.grocerieslist.fragment.SettingsFragment;
+import com.example.grocerieslist.fragment.product.PriceListFragment;
+import com.example.grocerieslist.fragment.product.ProductFragment;
+import com.example.grocerieslist.fragment.stock.CurrentStockFragment;
+import com.example.grocerieslist.fragment.stock.LatestStockFragment;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-public class CustTabsPagerAdapter extends FragmentPagerAdapter {
+public class ProductTabsPagerAdapter extends FragmentPagerAdapter {
 
 	private Context myContext;
 	int totalTabs;
 
-	public CustTabsPagerAdapter(Context context, FragmentManager fm, int totalTabs) {
+	public ProductTabsPagerAdapter(Context context, FragmentManager fm, int totalTabs) {
 		super(fm);
 		myContext = context;
 		this.totalTabs = totalTabs;
@@ -26,12 +28,11 @@ public class CustTabsPagerAdapter extends FragmentPagerAdapter {
 
 		switch (index) {
 		case 0:
-			//Customer wise product details.
-			return new LatestStockFragment();
+			return new ProductFragment();
 		case 1:
-			//Customer Details.
-			return new CurrentStockFragment();
-
+			return new PriceListFragment();
+		case 2:
+			return new SettingsFragment();
 		}
 
 		return null;

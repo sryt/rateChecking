@@ -1,4 +1,4 @@
-package com.example.grocerieslist.fragment;
+package com.example.grocerieslist.fragment.stock;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,7 +10,7 @@ import com.google.android.material.tabs.TabLayout;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
-public class StockFragment extends Fragment{
+public class StockTabFragment extends Fragment{
 
 	TabLayout tabLayout;
 	ViewPager viewPager;

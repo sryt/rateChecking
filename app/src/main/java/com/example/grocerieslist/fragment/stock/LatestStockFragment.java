@@ -1,4 +1,4 @@
-package com.example.grocerieslist.fragment;
+package com.example.grocerieslist.fragment.stock;
 
 import android.content.Intent;
 import android.os.Bundle;

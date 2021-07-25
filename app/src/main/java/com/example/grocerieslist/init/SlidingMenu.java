@@ -32,10 +32,11 @@ import com.example.grocerieslist.fragment.CustomerFragment;
 import com.example.grocerieslist.fragment.DashboardFragment;
 import com.example.grocerieslist.fragment.LocationFragment;
 import com.example.grocerieslist.fragment.PickUpPersonFragment;
-import com.example.grocerieslist.fragment.PriceListFragment;
-import com.example.grocerieslist.fragment.ProductFragment;
+import com.example.grocerieslist.fragment.product.PriceListFragment;
+import com.example.grocerieslist.fragment.product.ProductFragment;
 import com.example.grocerieslist.fragment.SettingsFragment;
-import com.example.grocerieslist.fragment.StockFragment;
+import com.example.grocerieslist.fragment.product.ProductTabFragment;
+import com.example.grocerieslist.fragment.stock.StockTabFragment;
 import com.example.grocerieslist.utilities.AppGlobal;
 import com.example.grocerieslist.utilities.CircleTransform;
 import com.example.grocerieslist.utilities.Constant;
@@ -351,8 +352,8 @@ public class SlidingMenu extends AppCompatActivity {
                 DashboardFragment homeFragment = new DashboardFragment();
                 return homeFragment;
             case 1:
-                ProductFragment productFragment = new ProductFragment();
-                return productFragment;
+                ProductTabFragment productTabFragment = new ProductTabFragment();
+                return productTabFragment;
             case 2:
                 CustomerFragment customerFragment = new CustomerFragment();
                 return customerFragment;
@@ -365,8 +366,8 @@ public class SlidingMenu extends AppCompatActivity {
                 /*FilterFragment photosFragment = new FilterFragment();
                 return photosFragment;*/
             case 5:
-                StockFragment stockFragment = new StockFragment();
-                return stockFragment;
+                StockTabFragment stockTabFragment = new StockTabFragment();
+                return stockTabFragment;
                 /*NotificationsFragment notificationsFragment = new NotificationsFragment();
                 return notificationsFragment;*/
             case 6:
