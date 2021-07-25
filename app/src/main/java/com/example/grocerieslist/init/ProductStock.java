@@ -2,6 +2,7 @@ package com.example.grocerieslist.init;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.util.Log;
@@ -20,13 +21,19 @@ import com.example.grocerieslist.db.product.ProductAccess;
 import com.example.grocerieslist.db.product.ProductClass;
 import com.example.grocerieslist.db.stock.StockAccess;
 import com.example.grocerieslist.db.stock.StockClass;
+import com.example.grocerieslist.db.stockdetails.StockDetailsAccess;
+import com.example.grocerieslist.db.stockdetails.StockDetailsClass;
 import com.example.grocerieslist.utilities.AppGlobal;
 import com.example.grocerieslist.utilities.Constant;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -41,17 +48,26 @@ public class ProductStock extends AppCompatActivity {
     CardView items,save;
     LinearLayout itemsList;
     TextInputEditText dateTime,prodQtytxt,remark;
-    MaterialAutoCompleteTextView prodNametxt,custName;
+    MaterialAutoCompleteTextView prodNametxt,custName,location,pickup;
     RadioButton inward,outward;
 
     AppGlobal global;
     List<ProductClass> pcs;
     List<CustomerClass> ccs;
     List<String> prodName,custList;
+    String custId,locId,pupId;
+    StockDetailsClass loc,pup;
 
+    StockDetailsAccess sda;
     StockAccess psa;
     CustomerAccess ca;
     ProductAccess pa;
+
+    List<StockDetailsClass> pickUps;
+    List<String> pickupList,locationList;
+    List<StockDetailsClass> locations;
+
+    String cmd = "";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,6 +80,7 @@ public class ProductStock extends AppCompatActivity {
 
         global = new AppGlobal(ProductStock.this);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        cmd = getIntent().getStringExtra("cmd");
     }
 
     @Override
@@ -79,7 +96,16 @@ public class ProductStock extends AppCompatActivity {
         prodNametxt = itemsList.findViewById(R.id.li_prodname);
         prodQtytxt = itemsList.findViewById(R.id.li_prodqty);
         items = findViewById(R.id.lcs_items);
+        location  = findViewById(R.id.lcs_location);
+        pickup = findViewById(R.id.lcs_pickup_person);
         save = findViewById(R.id.lcs_save);
+
+        if(cmd != null){
+            if(cmd.equals("edit")){
+                setData();
+            }
+            Log.i(TAG,""+cmd);
+        }
 
         prepare();
 
@@ -150,6 +176,137 @@ public class ProductStock extends AppCompatActivity {
         });
     }
 
+    /**
+     * Set the data for editing the entry
+     */
+    StockClass passingData;
+    CustomerClass customerClass;
+    public void setData(){
+        String id = getIntent().getStringExtra("id");
+
+        StockAccess psa = new StockAccess(ProductStock.this);
+        psa.open();
+        passingData = psa.getProductStockById(id);
+        psa.close();
+
+        prodNametxt.setText(passingData.getProName());
+        prodQtytxt.setText(passingData.getQty());
+        remark.setText(passingData.getRemark());
+        dateTime.setText(global.dateFormat(passingData.getTs(),global.DATE_AMPM));
+        if(passingData.getType().equals(Constant.OUTWARDS)) {
+            outward.setChecked(true);
+            inward.setChecked(false);
+        }else{
+            outward.setChecked(false);
+            inward.setChecked(true);
+        }
+
+        items.setVisibility(View.GONE);
+
+        CustomerAccess ca = new CustomerAccess(ProductStock.this);
+        ca.open();
+        customerClass = ca.getCustomerDetailsById(passingData.getCustId());
+        ca.close();
+        custName.setText(customerClass.getName());
+
+        if(!passingData.getLocationId().isEmpty() || passingData.getLocationId() != null){
+            sda = new StockDetailsAccess(ProductStock.this);
+            sda.open();
+            loc = sda.getStockDetailsById(passingData.getLocationId());
+            pup = sda.getStockDetailsById(passingData.getPersonId());
+            sda.close();
+
+            pickup.setText(pup.getName());
+            location.setText(loc.getName());
+        }
+    }
+
+    /**
+     * Save the content to the database for feature references.
+     */
+    public void saveStock(){
+        String proNameStr = prodNametxt.getText().toString().trim();
+        String qtyStr = prodQtytxt.getText().toString().trim();
+        String typeStr = Constant.OUTWARDS;
+        String remarkStr = remark.getText().toString().trim();
+
+        if(inward.isChecked())
+            typeStr = Constant.INWARDS;
+
+        StockClass pcs = new StockClass(proNameStr,custId,locId,pupId,ts,typeStr,qtyStr,remarkStr);
+        Log.i(TAG,"product class stock "+pcs.toString());
+
+        StockAccess pca = new StockAccess(ProductStock.this);
+        pca.open();
+        pca.addProductStockDetails(pcs);
+        pca.close();
+    }
+
+    /**
+     * Update the saved record.
+     */
+    public void updateStock(){
+        String proNameStr = prodNametxt.getText().toString().trim();
+        String qtyStr = prodQtytxt.getText().toString().trim();
+        String typeStr = Constant.OUTWARDS;
+        String locStr = location.getText().toString();
+        String pupStr = pickup.getText().toString();
+        String remarkStr = remark.getText().toString().trim();
+
+        if(inward.isChecked())
+            typeStr = Constant.INWARDS;
+
+        String cusName = custName.getText().toString().trim();
+        CustomerAccess ca = new CustomerAccess(ProductStock.this);
+        ca.open();
+        CustomerClass cc = ca.getCustomerDetailsByName(cusName);
+        ca.close();
+
+        sda = new StockDetailsAccess(ProductStock.this);
+        sda.open();
+        StockDetailsClass sdcLoc = sda.getStockDetailsByName(locStr);
+        StockDetailsClass sdcPup = sda.getStockDetailsByName(pupStr);
+        sda.close();
+
+        SimpleDateFormat formatter = new SimpleDateFormat("d-MMM-yyyy hh:mm a");
+        try {
+            Date gmt = formatter.parse(dateTime.getText().toString().trim());
+            StockClass pcs = new StockClass(passingData.getId(),proNameStr,cc.getId(),sdcLoc.getId(),sdcPup.getId(),String.valueOf(gmt.getTime()),typeStr,qtyStr,remarkStr);
+            Log.i(TAG,"product class stock "+pcs.toString());
+
+            StockAccess pca = new StockAccess(ProductStock.this);
+            pca.open();
+            boolean res = pca.updateStock(pcs);
+            pca.close();
+
+            if(res){
+                Snackbar.make(custName,"Successfully updated the record",Snackbar.LENGTH_SHORT).show();
+                onBackPressed();
+            }else{
+                Snackbar.make(custName,"Error while updating the record. Try later....",Snackbar.LENGTH_SHORT).setAction("OK", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        onBackPressed();
+                    }
+                }).setActionTextColor(Color.BLUE).show();
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    /**
+     * Clean all the input field.
+     */
+    public void clearForm(){
+        prodNametxt.setText("");
+        dateTime.setText("");
+        prodQtytxt.setText("");
+        remark.setText("");
+    }
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -183,6 +340,28 @@ public class ProductStock extends AppCompatActivity {
             }
             ArrayAdapter<String> adapter = new ArrayAdapter<>(ProductStock.this,android.R.layout.simple_list_item_1,custList);
             custName.setAdapter(adapter);
+        }
+
+        sda = new StockDetailsAccess(ProductStock.this);
+        sda.open();
+        pickUps = sda.getStockDetailsByType(Constant.PERSON);
+        locations = sda.getStockDetailsByType(Constant.PLACE);
+        sda.close();
+
+        if(pickUps.size() > 0){
+            pickupList = new ArrayList<>();
+            for(int i=0;i<pickUps.size();i++)
+                pickupList.add(pickUps.get(i).getName());
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(ProductStock.this,android.R.layout.simple_list_item_1,pickupList);
+            pickup.setAdapter(adapter);
+        }
+
+        if(locations.size() > 0){
+            locationList = new ArrayList<>();
+            for(int i=0;i<locations.size();i++)
+                locationList.add(locations.get(i).getName());
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(ProductStock.this,android.R.layout.simple_list_item_1,locationList);
+            location.setAdapter(adapter);
         }
     }
 

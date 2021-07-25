@@ -34,8 +34,8 @@ import com.example.grocerieslist.fragment.LocationFragment;
 import com.example.grocerieslist.fragment.PickUpPersonFragment;
 import com.example.grocerieslist.fragment.PriceListFragment;
 import com.example.grocerieslist.fragment.ProductFragment;
-import com.example.grocerieslist.fragment.ProductStockFragment;
 import com.example.grocerieslist.fragment.SettingsFragment;
+import com.example.grocerieslist.fragment.StockFragment;
 import com.example.grocerieslist.utilities.AppGlobal;
 import com.example.grocerieslist.utilities.CircleTransform;
 import com.example.grocerieslist.utilities.Constant;
@@ -82,7 +82,7 @@ public class SlidingMenu extends AppCompatActivity {
     private static final String TAG_PRICELIST = "pricelist";
     private static final String TAG_FILTER = "filter";
     private static final String TAG_NOTIFICATIONS = "notifications";
-    private static final String TAG_PRODUCTSTOCK = "productstock";
+    private static final String TAG_STOCK = "stock";
     private static final String TAG_SETTINGS = "settings";
     private static final String TAG_CUSTOMER = "customer";
     private static final String TAG_STORAGELOCATION = "storagelocation";
@@ -136,7 +136,7 @@ public class SlidingMenu extends AppCompatActivity {
                     dialogCreate(Constant.PERSON);
                 }else if(CURRENT_TAG.equals(TAG_CUSTOMER)){
                     importData(Constant.CUSTOMER);
-                }else if(CURRENT_TAG.equals(TAG_PRODUCTSTOCK)){
+                }else if(CURRENT_TAG.equals(TAG_STOCK)){
                     Intent newSales = new Intent(SlidingMenu.this,ProductStock.class);
                     startActivity(newSales);
                 }else{
@@ -216,38 +216,6 @@ public class SlidingMenu extends AppCompatActivity {
         dialog.show();
     }
 
-
-
-    public void importCusotmer(){
-        AlertDialog.Builder builderSingle = new AlertDialog.Builder(SlidingMenu.this);
-        builderSingle.setIcon(R.mipmap.logo);
-        builderSingle.setTitle("Select any one:-");
-
-        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(SlidingMenu.this, android.R.layout.select_dialog_item);
-        arrayAdapter.add(Constant.IMPORT+" "+Constant.CUSTOMER);
-        arrayAdapter.add(Constant.CREATE+" "+Constant.CUSTOMER);
-
-        builderSingle.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String strName = arrayAdapter.getItem(which);
-                if(strName.equals(Constant.IMPORT+" "+Constant.CUSTOMER)){
-                    Intent mRequestFileIntent = new Intent(Intent.ACTION_GET_CONTENT);
-                    mRequestFileIntent.setType("text/*");
-                    startActivityForResult(mRequestFileIntent, PICKFILE_REQUEST_CODE_CUST);
-                }
-
-            }
-        });
-        builderSingle.show();
-    }
-
     public void importData(final String cmd){
         AlertDialog.Builder builderSingle = new AlertDialog.Builder(SlidingMenu.this);
         builderSingle.setIcon(R.mipmap.logo);
@@ -276,36 +244,6 @@ public class SlidingMenu extends AppCompatActivity {
                         startActivityForResult(mRequestFileIntent, PICKFILE_REQUEST_CODE);
                     else if(cmd.equals(Constant.STOCK))
                         startActivityForResult(mRequestFileIntent, PICKFILE_REQUEST_CODE_STOCK);
-                }
-
-            }
-        });
-        builderSingle.show();
-    }
-
-    public void importProduct(){
-        AlertDialog.Builder builderSingle = new AlertDialog.Builder(SlidingMenu.this);
-        builderSingle.setIcon(R.mipmap.logo);
-        builderSingle.setTitle("Select any one:-");
-
-        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(SlidingMenu.this, android.R.layout.select_dialog_item);
-        arrayAdapter.add(Constant.IMPORT+" "+Constant.PRODUCT);
-        arrayAdapter.add(Constant.CREATE+" "+Constant.PRODUCT);
-
-        builderSingle.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String strName = arrayAdapter.getItem(which);
-                if(strName.equals(Constant.IMPORT+" "+Constant.CUSTOMER)){
-                    Intent mRequestFileIntent = new Intent(Intent.ACTION_GET_CONTENT);
-                    mRequestFileIntent.setType("text/*");
-                    startActivityForResult(mRequestFileIntent, PICKFILE_REQUEST_CODE_CUST);
                 }
 
             }
@@ -427,8 +365,8 @@ public class SlidingMenu extends AppCompatActivity {
                 /*FilterFragment photosFragment = new FilterFragment();
                 return photosFragment;*/
             case 5:
-                ProductStockFragment productStockFragment = new ProductStockFragment();
-                return productStockFragment;
+                StockFragment stockFragment = new StockFragment();
+                return stockFragment;
                 /*NotificationsFragment notificationsFragment = new NotificationsFragment();
                 return notificationsFragment;*/
             case 6:
@@ -492,7 +430,7 @@ public class SlidingMenu extends AppCompatActivity {
                         break;
                     case R.id.nav_produt_stock:
                         navItemIndex = 5;
-                        CURRENT_TAG = TAG_PRODUCTSTOCK;
+                        CURRENT_TAG = TAG_STOCK;
                         break;
                     case R.id.nav_pricelist:
                         navItemIndex = 6;
@@ -627,7 +565,7 @@ public class SlidingMenu extends AppCompatActivity {
     // show or hide the fab
     private void toggleFab() {
         if (navItemIndex == 0 || navItemIndex == 1 || navItemIndex == 2 ||
-                navItemIndex == 3 || navItemIndex == 4 || navItemIndex == 7)
+                navItemIndex == 3 || navItemIndex == 4 || navItemIndex == 7 || navItemIndex == 5)
             fab.show();
         else
             fab.hide();

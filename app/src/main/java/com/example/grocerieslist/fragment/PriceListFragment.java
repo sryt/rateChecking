@@ -14,7 +14,7 @@ import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.example.grocerieslist.R;
-import com.example.grocerieslist.adapter.PriceDetailsAdapter;
+import com.example.grocerieslist.adapter.listadapter.PriceDetailsAdapter;
 import com.example.grocerieslist.db.product.ProductAccess;
 import com.example.grocerieslist.db.product.ProductClass;
 import com.example.grocerieslist.utilities.AppGlobal;

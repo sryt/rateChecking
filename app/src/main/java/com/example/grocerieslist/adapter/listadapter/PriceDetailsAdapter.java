@@ -1,4 +1,4 @@
-package com.example.grocerieslist.adapter;
+package com.example.grocerieslist.adapter.listadapter;
 
 import android.app.Activity;
 import android.content.Context;
@@ -17,9 +17,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Tejaswi on 25/07/21.
+ * Created by Tejaswi on 17/01/21.
  */
-public class ProductAdapter extends ArrayAdapter<ProductClass> implements Filterable {
+public class PriceDetailsAdapter extends ArrayAdapter<ProductClass> implements Filterable {
+    String TAG = PriceDetailsAdapter.class.getSimpleName();
+
     private Activity act;
     int layoutResourceId;
     List<ProductClass> ccs;
@@ -29,7 +31,7 @@ public class ProductAdapter extends ArrayAdapter<ProductClass> implements Filter
     CustomFilter filter;
     MenuHolder holder;
 
-    public ProductAdapter(Activity act, int resource, List<ProductClass> data_list) {
+    public PriceDetailsAdapter(Activity act, int resource, List<ProductClass> data_list) {
         super(act, resource, data_list);
         this.act = act;
         this.layoutResourceId = resource;
@@ -65,7 +67,7 @@ public class ProductAdapter extends ArrayAdapter<ProductClass> implements Filter
     @Override
     public Filter getFilter() {
         if(filter == null) {
-            filter=new CustomFilter();
+            filter=new PriceDetailsAdapter.CustomFilter();
         }
         return filter;
     }
@@ -107,4 +109,5 @@ public class ProductAdapter extends ArrayAdapter<ProductClass> implements Filter
         }
 
     }
+
 }

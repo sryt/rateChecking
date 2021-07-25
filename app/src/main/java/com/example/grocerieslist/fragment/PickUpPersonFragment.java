@@ -55,7 +55,7 @@ public class PickUpPersonFragment extends Fragment {
 
         sda = new StockDetailsAccess(getActivity());
         sda.open();
-        sdcs = sda.getStockDetails(Constant.PERSON);
+        sdcs = sda.getStockDetailsByType(Constant.PERSON);
         sda.close();
 
         names = new ArrayList<>();

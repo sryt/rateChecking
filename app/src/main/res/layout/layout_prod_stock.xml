@@ -59,22 +59,26 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
+                android:id="@+id/lcs_pickup_person_lay"
                 android:layout_weight="0.5"
-                android:hint="@string/sa_remark">
-                <com.google.android.material.textfield.TextInputEditText
+                android:hint="@string/nav_pick_up_person">
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
                     android:layout_width="match_parent"
                     android:inputType="textCapSentences"
+                    android:id="@+id/lcs_pickup_person"
                     android:layout_height="wrap_content"/>
             </com.google.android.material.textfield.TextInputLayout>
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
+                android:id="@+id/lcs_location_lay"
                 android:layout_weight="0.5"
-                android:hint="@string/sa_remark">
-                <com.google.android.material.textfield.TextInputEditText
+                android:hint="@string/nav_storage_location">
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
                     android:layout_width="match_parent"
                     android:inputType="textCapSentences"
+                    android:id="@+id/lcs_location"
                     android:layout_height="wrap_content"/>
             </com.google.android.material.textfield.TextInputLayout>z
         </LinearLayout>

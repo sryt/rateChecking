@@ -5,11 +5,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
 
 import com.example.grocerieslist.R;
+import com.example.grocerieslist.adapter.listadapter.CustomAdapter;
 import com.example.grocerieslist.db.customer.CustomerAccess;
 import com.example.grocerieslist.db.customer.CustomerClass;
 import com.example.grocerieslist.utilities.AppGlobal;
@@ -47,11 +47,9 @@ public class CustomerFragment extends Fragment {
         lv = rootView.findViewById(R.id.listview);
         search = rootView.findViewById(R.id.search);
 
-
         return rootView;
     }
 
-    List<String> names;
     @Override
     public void onResume() {
         super.onResume();
@@ -59,21 +57,55 @@ public class CustomerFragment extends Fragment {
         ca.open();
         ccs = ca.getCustomerDetails();
         ca.close();
-        names = new ArrayList<>();
 
         Log.i(TAG,"Customer details size "+ccs.size());
         if(ccs.size() > 0){
-            for(int i=0;i<ccs.size();i++)
-                names.add(ccs.get(i).getName());
-        }else{
-            names.add("No Data......");
+            adapter = new CustomAdapter(getActivity(),R.layout.custlayout,ccs);
+            adapter.sort(new Comparator<CustomerClass>() {
+                @Override
+                public int compare(CustomerClass s, CustomerClass t1) {
+                    return s.getName().compareTo(t1.getName());
+                }
+            });
+            lv.setAdapter(adapter);
         }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),android.R.layout.simple_list_item_1,names);
-        adapter.sort(new Comparator<String>() {
+        search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public int compare(String s, String t1) {
-                return s.compareTo(t1);
+            public boolean onQueryTextSubmit(String s) {
+                searchFlow(s);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                searchFlow(s);
+                return false;
+            }
+        });
+    }
+
+    boolean filterFlag = false;
+    List<String> proNameFilter;
+    List<CustomerClass> pcFilter;
+    CustomAdapter adapter;
+
+    public void searchFlow(String s){
+        filterFlag = true;
+        pcFilter = new ArrayList<>();
+        proNameFilter = new ArrayList<>();
+        for(CustomerClass pc : ccs){
+            if(pc.getName().toLowerCase().contains(s.toLowerCase())){
+                pcFilter.add(pc);
+                proNameFilter.add(pc.getName());
+            }
+        }
+
+        adapter = new CustomAdapter(getActivity(),R.layout.custlayout,pcFilter);
+        adapter.sort(new Comparator<CustomerClass>() {
+            @Override
+            public int compare(CustomerClass lhs, CustomerClass rhs) {
+                return lhs.getName().compareTo(rhs.getName());
             }
         });
         lv.setAdapter(adapter);

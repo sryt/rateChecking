@@ -1,39 +1,40 @@
-package com.example.grocerieslist.adapter;
+package com.example.grocerieslist.adapter.listadapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.grocerieslist.R;
+import com.example.grocerieslist.db.customer.CustomerClass;
 import com.example.grocerieslist.db.product.ProductClass;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Tejaswi on 17/01/21.
+ * Created by Tejaswi on 12/12/20.
  */
-public class PriceDetailsAdapter extends ArrayAdapter<ProductClass> implements Filterable {
-    String TAG = PriceDetailsAdapter.class.getSimpleName();
+public class CustomAdapter extends ArrayAdapter<CustomerClass> implements Filterable {
+    String TAG = CustomAdapter.class.getSimpleName();
 
     private Activity act;
     int layoutResourceId;
-    List<ProductClass> ccs;
-    List<ProductClass> filterList;
-    ProductClass pc;
+    List<CustomerClass> ccs;
+    List<CustomerClass> filterList;
+    CustomerClass pc;
     int numChange = 0;
     CustomFilter filter;
     MenuHolder holder;
 
-    public PriceDetailsAdapter(Activity act, int resource, List<ProductClass> data_list) {
+    public CustomAdapter(Activity act, int resource, List<CustomerClass> data_list) {
         super(act, resource, data_list);
         this.act = act;
         this.layoutResourceId = resource;
@@ -46,22 +47,17 @@ public class PriceDetailsAdapter extends ArrayAdapter<ProductClass> implements F
         final View row = inflater.inflate(layoutResourceId, parent, false);
         holder = new MenuHolder();
 
-        holder.name = row.findViewById(R.id.pd_name);
-        holder.cPrice = row.findViewById(R.id.pd_cPrice);
-        holder.wPrice = row.findViewById(R.id.pd_wPrice);
-        holder.rPrice = row.findViewById(R.id.pd_rPrice);
-        holder.mrp = row.findViewById(R.id.pd_mPrice);
-
-        if(pos%2 != 0)
-            row.setBackgroundColor(act.getResources().getColor(android.R.color.darker_gray));
+        holder.ll = row.findViewById(R.id.cl_ll);
+        holder.img = row.findViewById(R.id.cl_img);
+        holder.name = row.findViewById(R.id.cl_prodName);
+        holder.desc = row.findViewById(R.id.cl_desc);
 
         pc = ccs.get(pos);
-        String namePack = pc.getPackingsize() + pc.getPackuom();
-        holder.name.setText(pc.getName()+" "+namePack);
-        holder.cPrice.setText(pc.getCost());
-        holder.wPrice.setText(pc.getSpecial());
-        holder.rPrice.setText(pc.getRetail());
-        holder.mrp.setText(pc.getMrp());
+        holder.name.setText(pc.getName());
+        if(pc.getPhone1().isEmpty())
+            holder.desc.setText(pc.getPhone2());
+        else
+            holder.desc.setText(pc.getPhone1());
 
         return row;
     }
@@ -69,7 +65,7 @@ public class PriceDetailsAdapter extends ArrayAdapter<ProductClass> implements F
     @Override
     public Filter getFilter() {
         if(filter == null) {
-            filter=new PriceDetailsAdapter.CustomFilter();
+            filter=new CustomFilter();
         }
         return filter;
     }
@@ -77,7 +73,9 @@ public class PriceDetailsAdapter extends ArrayAdapter<ProductClass> implements F
     /**************************************************************************/
     /**************************************************************************/
     static class MenuHolder {
-        TextView name,cPrice,wPrice,rPrice,mrp;
+        LinearLayout ll;
+        TextView name,desc;
+        ImageView img;
     }
 
     class CustomFilter extends Filter {
@@ -111,5 +109,4 @@ public class PriceDetailsAdapter extends ArrayAdapter<ProductClass> implements F
         }
 
     }
-
 }

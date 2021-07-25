@@ -80,7 +80,44 @@ public class StockDetailsAccess {
 
     /*******************************************************************/
     /*******************************************************************/
-    public List<StockDetailsClass> getStockDetails(String type){
+    public StockDetailsClass getStockDetailsById(String id){
+        StockDetailsClass comments = null;
+        String myquery = "select * from " + StockDetailsDB.TABLE +
+                " where "+ StockDetailsDB.KEY_ID+" = '"+id+"'";
+
+        Cursor cursor = database.rawQuery(myquery, null);
+        cursor.moveToFirst();
+        while(!cursor.isAfterLast()){
+            StockDetailsClass name = cursorTotemp(cursor);
+            comments = name;
+            cursor.moveToNext();
+        }
+        cursor.close();
+        return comments;
+    }
+
+    /*******************************************************************/
+    /*******************************************************************/
+    public StockDetailsClass getStockDetailsByName(String name){
+        StockDetailsClass comments = null;
+        String myquery = "select * from " + StockDetailsDB.TABLE +
+                " where "+ StockDetailsDB.KEY_NAME+" = '"+name+"'";
+
+        Cursor cursor = database.rawQuery(myquery, null);
+        cursor.moveToFirst();
+        while(!cursor.isAfterLast()){
+            StockDetailsClass sdc = cursorTotemp(cursor);
+            comments = sdc;
+            cursor.moveToNext();
+        }
+        cursor.close();
+        return comments;
+    }
+
+
+    /*******************************************************************/
+    /*******************************************************************/
+    public List<StockDetailsClass> getStockDetailsByType(String type){
         List<StockDetailsClass> comments = new ArrayList<>();
         String myquery = "select * from " + StockDetailsDB.TABLE +
                 " where "+ StockDetailsDB.KEY_TYPE+" = '"+type+"'";

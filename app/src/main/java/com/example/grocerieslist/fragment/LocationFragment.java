@@ -55,7 +55,7 @@ public class LocationFragment extends Fragment {
 
         sda = new StockDetailsAccess(getActivity());
         sda.open();
-        sdcs = sda.getStockDetails(Constant.PLACE);
+        sdcs = sda.getStockDetailsByType(Constant.PLACE);
         sda.close();
 
         names = new ArrayList<>();
