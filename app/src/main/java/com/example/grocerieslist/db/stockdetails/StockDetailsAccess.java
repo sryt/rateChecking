@@ -39,6 +39,10 @@ public class StockDetailsAccess {
 
         ContentValues values = new ContentValues();
         values.put(StockDetailsDB.KEY_NAME,prod.getName());
+        values.put(StockDetailsDB.KEY_ADDRESS,prod.getAddress());
+        values.put(StockDetailsDB.KEY_STATE,prod.getState());
+        values.put(StockDetailsDB.KEY_PINCODE,prod.getPincode());
+        values.put(StockDetailsDB.KEY_NUMBER,prod.getNumber());
         values.put(StockDetailsDB.KEY_DESC,prod.getDesc());
         values.put(StockDetailsDB.KEY_TYPE,prod.getType());
         values.put(StockDetailsDB.KEY_STATUS, prod.getStatus());
@@ -138,6 +142,10 @@ public class StockDetailsAccess {
         StockDetailsClass temp = new StockDetailsClass(
                 cursor.getString(cursor.getColumnIndex(StockDetailsDB.KEY_ID)),
                 cursor.getString(cursor.getColumnIndex(StockDetailsDB.KEY_NAME)),
+                cursor.getString(cursor.getColumnIndex(StockDetailsDB.KEY_ADDRESS)),
+                cursor.getString(cursor.getColumnIndex(StockDetailsDB.KEY_STATE)),
+                cursor.getString(cursor.getColumnIndex(StockDetailsDB.KEY_PINCODE)),
+                cursor.getString(cursor.getColumnIndex(StockDetailsDB.KEY_NUMBER)),
                 cursor.getString(cursor.getColumnIndex(StockDetailsDB.KEY_DESC)),
                 cursor.getString(cursor.getColumnIndex(StockDetailsDB.KEY_TYPE)),
                 cursor.getString(cursor.getColumnIndex(StockDetailsDB.KEY_STATUS)),

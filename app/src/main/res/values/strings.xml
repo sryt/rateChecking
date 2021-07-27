@@ -142,6 +142,13 @@
     <string name="billNo">Bill Number:</string>
     <string name="date">Date :</string>
 
+    <string name="phone">Phone Number</string>
+    <string name="state">State</string>
+    <string name="scode">State Code</string>
+    <string name="email">E-mail</string>
+    <string name="gst_num">GST Number</string>
+    <string name="edit">EDIT</string>
+
     <string-array name="group">
         <item>Rice</item>
         <item>Dall</item>

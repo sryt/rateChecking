@@ -40,6 +40,7 @@ public class AppGlobal {
     public String App_Pass_Code = "passCode";
 
     public String App_Selected_Prod = "prodSelected";
+    public String App_Selected_Company = "compSelected";
 
     public String App_Selected_Path = "prodPath";
 

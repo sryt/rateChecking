@@ -1,17 +1,23 @@
 package com.example.grocerieslist.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.example.grocerieslist.R;
 import com.example.grocerieslist.adapter.listadapter.CustomAdapter;
 import com.example.grocerieslist.db.customer.CustomerAccess;
 import com.example.grocerieslist.db.customer.CustomerClass;
+import com.example.grocerieslist.db.product.ProductClass;
+import com.example.grocerieslist.fragment.product.ProductTabFragment;
+import com.example.grocerieslist.init.CustomerTabView;
 import com.example.grocerieslist.utilities.AppGlobal;
 
 import java.util.ArrayList;
@@ -32,6 +38,7 @@ public class CustomerFragment extends Fragment {
 
     CustomerAccess ca;
     List<CustomerClass> ccs;
+    CustomerClass customerClass;
 
     public CustomerFragment() {
         // Required empty public constructor
@@ -83,6 +90,24 @@ public class CustomerFragment extends Fragment {
                 return false;
             }
         });
+
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                ProductClass productClass;
+                if(filterFlag)
+                    customerClass = pcFilter.get(i);
+                else
+                    customerClass = ccs.get(i);
+
+                Toast.makeText(getActivity(),""+customerClass.toString(),Toast.LENGTH_SHORT).show();
+                Intent det = new Intent(getActivity(), CustomerTabView.class);
+                det.putExtra("custId",customerClass.getId());
+                det.putExtra("cmd","view");
+                getActivity().startActivity(det);
+            }
+        });
+
     }
 
     boolean filterFlag = false;

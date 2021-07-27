@@ -41,7 +41,8 @@
         <activity android:name=".init.CompanyList" android:screenOrientation="portrait"/>
         <activity android:name=".init.NewSales" android:screenOrientation="portrait"/>
         <activity android:name=".init.ProductStock" android:screenOrientation="portrait"/>
-
+        <activity android:name=".init.CustomerTabView" android:screenOrientation="portrait"/>
+        <activity android:name=".init.ProductDetails" android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

@@ -20,13 +20,12 @@ public class ProductTabFragment extends Fragment {
     TabLayout tabLayout;
     ViewPager viewPager;
     private ProductTabsPagerAdapter mAdapter;
+    View rootView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.layout_tabview, container, false);
-
-
+        rootView = inflater.inflate(R.layout.layout_tabview, container, false);
         tabLayout= rootView.findViewById(R.id.tabLayout);
         viewPager= rootView.findViewById(R.id.viewPager);
 
@@ -55,7 +54,12 @@ public class ProductTabFragment extends Fragment {
 
             }
         });
-
         return rootView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        
     }
 }

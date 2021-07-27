@@ -16,6 +16,7 @@
             android:layout_height="wrap_content"
             android:textSize="@dimen/comp_title"
             android:textStyle="bold"
+            android:id="@+id/ld_comp_name"
             android:textColor="@color/colorPrimaryDark"
             android:text="@string/companyTitle"/>
     </LinearLayout>

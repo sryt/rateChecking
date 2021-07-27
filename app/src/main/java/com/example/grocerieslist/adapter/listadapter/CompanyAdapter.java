@@ -2,6 +2,8 @@ package com.example.grocerieslist.adapter.listadapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,7 @@ import android.widget.TextView;
 import com.example.grocerieslist.R;
 import com.example.grocerieslist.db.company.CompanyClass;
 import com.example.grocerieslist.db.product.ProductClass;
+import com.example.grocerieslist.utilities.AppGlobal;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +33,7 @@ public class CompanyAdapter extends ArrayAdapter<CompanyClass> implements Filter
         List<CompanyClass> ccs;
         List<CompanyClass> filterList;
         CompanyClass pc;
-        int numChange = 0;
+        AppGlobal global;
         CustomFilter filter;
         MenuHolder holder;
 
@@ -39,6 +42,8 @@ public class CompanyAdapter extends ArrayAdapter<CompanyClass> implements Filter
             this.act = act;
             this.layoutResourceId = resource;
             this.ccs = data_list;
+
+            global = new AppGlobal(act);
         }
 
         public View getView(final int pos, View convertView, ViewGroup parent) {
@@ -53,8 +58,12 @@ public class CompanyAdapter extends ArrayAdapter<CompanyClass> implements Filter
             holder.desc = row.findViewById(R.id.cl_desc);
 
             pc = ccs.get(pos);
+            Log.i(TAG,"company details is "+pc.toString());
             holder.name.setText(pc.getCompanyName());
-            holder.desc.setText(pc.getGstNo());
+            holder.desc.setText(pc.getPhoneNumber());
+
+            if(pc.getId().equals(String.valueOf(global.getPreference(global.App_Selected_Company))))
+                holder.name.setTextColor(Color.GREEN);
 
             return row;
         }

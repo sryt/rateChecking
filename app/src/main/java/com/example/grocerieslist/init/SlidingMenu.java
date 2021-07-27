@@ -25,6 +25,8 @@ import com.example.grocerieslist.R;
 import com.example.grocerieslist.background.ProcessCustAsync;
 import com.example.grocerieslist.background.ProcessDataAsync;
 import com.example.grocerieslist.background.ProcessStockAsync;
+import com.example.grocerieslist.db.company.CompanyAccess;
+import com.example.grocerieslist.db.company.CompanyClass;
 import com.example.grocerieslist.db.stockdetails.StockDetailsAccess;
 import com.example.grocerieslist.db.stockdetails.StockDetailsClass;
 import com.example.grocerieslist.fragment.CompanyFragment;
@@ -46,6 +48,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.Calendar;
+import java.util.List;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -180,6 +183,10 @@ public class SlidingMenu extends AppCompatActivity {
 
         TextView title = dialog.findViewById(R.id.csd_title);
         final TextInputEditText name = dialog.findViewById(R.id.csd_name);
+        final TextInputEditText address = dialog.findViewById(R.id.csd_address);
+        final TextInputEditText state = dialog.findViewById(R.id.csd_state);
+        final TextInputEditText number = dialog.findViewById(R.id.csd_number);
+        final TextInputEditText pincode = dialog.findViewById(R.id.csd_pincode);
         final TextInputEditText desc = dialog.findViewById(R.id.csd_desc);
         final Spinner status = dialog.findViewById(R.id.csd_status);
         CardView save = dialog.findViewById(R.id.csd_save);
@@ -191,10 +198,14 @@ public class SlidingMenu extends AppCompatActivity {
             public void onClick(View view) {
                 String nameStr = name.getText().toString().trim();
                 String descStr = desc.getText().toString().trim();
+                String addStr = address.getText().toString().trim();
+                String stateStr = state.getText().toString().trim();
+                String pincodeStr = pincode.getText().toString().trim();
+                String numStr = number.getText().toString().trim();
                 String statusStr = String.valueOf(status.getSelectedItem());
 
                 if(!nameStr.isEmpty()){
-                    StockDetailsClass sdc = new StockDetailsClass(nameStr,descStr,type,statusStr,"");
+                    StockDetailsClass sdc = new StockDetailsClass(nameStr,addStr,stateStr,pincodeStr,numStr,descStr,type,statusStr,"");
                     StockDetailsAccess sda = new StockDetailsAccess(SlidingMenu.this);
                     sda.open();
                     sda.addStockDetails(sdc);
@@ -220,7 +231,7 @@ public class SlidingMenu extends AppCompatActivity {
     public void importData(final String cmd){
         AlertDialog.Builder builderSingle = new AlertDialog.Builder(SlidingMenu.this);
         builderSingle.setIcon(R.mipmap.logo);
-        builderSingle.setTitle("Select any one:-");
+        builderSingle.setTitle("Select new "+cmd+" of create");
 
         final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(SlidingMenu.this, android.R.layout.select_dialog_item);
         arrayAdapter.add(Constant.IMPORT+" "+cmd);
@@ -277,15 +288,68 @@ public class SlidingMenu extends AppCompatActivity {
         }
     }
 
+    AlertDialog.Builder builderSingle;
+    public void selectCompany(){
+        builderSingle = new AlertDialog.Builder(this);
+        builderSingle.setIcon(R.mipmap.logo);
+        builderSingle.setTitle("Select Company....");
+
+        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.select_dialog_item);
+        for(int i=0;i<ccs.size();i++)
+            arrayAdapter.add(ccs.get(i).getCompanyName());
+
+        builderSingle.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String strName = arrayAdapter.getItem(which);
+                global.setPreference(global.App_Selected_Company,ccs.get(which).getId(),Constant.Pref_String,null);
+                loadNavHeader();
+            }
+        });
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                builderSingle.show();
+            }
+        });
+    }
+
     /***
      * Load navigation menu header information
      * like background image, profile image
      * name, website, notifications action view (dot)
      */
+    CompanyClass companyClass;
+    CompanyAccess ca;
+    List<CompanyClass> ccs;
     private void loadNavHeader() {
         // name, website
-        txtName.setText(String.valueOf(global.getPreference(global.App_Username)));
-        txtWebsite.setText(String.valueOf(global.getPreference(global.App_WhatsApp_Number)));
+        String name = "",gst="";
+        CompanyAccess ca = new CompanyAccess(SlidingMenu.this);
+        if(global.getPreference(global.App_Selected_Company) != null){
+            String ccid = String.valueOf(global.getPreference(global.App_Selected_Company));
+            ca.open();
+            companyClass = ca.getCompanyDetails(ccid);
+            ca.close();
+
+            Log.i(TAG,"company details "+companyClass.toString());
+            name = companyClass.getCompanyName();
+            gst = companyClass.getCompanyOwner();
+
+        }else{
+            ca.open();
+            ccs = ca.getCompaniesDetails();
+            ca.close();
+            selectCompany();
+        }
+        txtName.setText(name);
+        txtWebsite.setText(gst);
 
         // loading header background image
         Glide.with(this).load(R.drawable.sales_background)

@@ -6,6 +6,10 @@ package com.example.grocerieslist.db.stockdetails;
 public class StockDetailsClass {
     String id;
     String name;
+    String address;
+    String state;
+    String pincode;
+    String number;
     String desc;
     String type;
     String status;
@@ -14,17 +18,25 @@ public class StockDetailsClass {
     public StockDetailsClass() {
     }
 
-    public StockDetailsClass(String name, String desc, String type, String status, String flag) {
+    public StockDetailsClass(String name, String address, String state, String pincode, String number, String desc, String type, String status, String flag) {
         this.name = name;
+        this.address = address;
+        this.state = state;
+        this.pincode = pincode;
+        this.number = number;
         this.desc = desc;
         this.type = type;
         this.status = status;
         this.flag = flag;
     }
 
-    public StockDetailsClass(String id, String name, String desc, String type, String status, String flag) {
+    public StockDetailsClass(String id, String name, String address, String state, String pincode, String number, String desc, String type, String status, String flag) {
         this.id = id;
         this.name = name;
+        this.address = address;
+        this.state = state;
+        this.pincode = pincode;
+        this.number = number;
         this.desc = desc;
         this.type = type;
         this.status = status;
@@ -45,6 +57,38 @@ public class StockDetailsClass {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getPincode() {
+        return pincode;
+    }
+
+    public void setPincode(String pincode) {
+        this.pincode = pincode;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
     }
 
     public String getDesc() {
@@ -84,6 +128,10 @@ public class StockDetailsClass {
         return "StockDetailsClass{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
+                ", address='" + address + '\'' +
+                ", state='" + state + '\'' +
+                ", pincode='" + pincode + '\'' +
+                ", number='" + number + '\'' +
                 ", desc='" + desc + '\'' +
                 ", type='" + type + '\'' +
                 ", status='" + status + '\'' +

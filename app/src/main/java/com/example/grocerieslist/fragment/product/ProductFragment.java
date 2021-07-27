@@ -1,5 +1,6 @@
 package com.example.grocerieslist.fragment.product;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,7 +15,9 @@ import com.example.grocerieslist.R;
 import com.example.grocerieslist.adapter.listadapter.ProductAdapter;
 import com.example.grocerieslist.db.product.ProductAccess;
 import com.example.grocerieslist.db.product.ProductClass;
+import com.example.grocerieslist.init.ProductDetails;
 import com.example.grocerieslist.utilities.AppGlobal;
+import com.example.grocerieslist.utilities.Constant;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -44,11 +47,9 @@ public class ProductFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.homefragment, container, false);
 
-        appGlobal = new AppGlobal(getActivity());
         pa = new ProductAccess(getActivity());
         lv = rootView.findViewById(R.id.listview);
         search = rootView.findViewById(R.id.search);
-
 
         return rootView;
     }
@@ -58,6 +59,7 @@ public class ProductFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
+        appGlobal = new AppGlobal(getActivity());
         pa.open();
         pcs = pa.getProdDetails();
         pa.close();
@@ -90,7 +92,9 @@ public class ProductFragment extends Fragment {
                 else
                     productClass = pcs.get(i);
 
-                Toast.makeText(getActivity(),""+productClass.toString(),Toast.LENGTH_SHORT).show();
+                appGlobal.setPreference(appGlobal.App_Selected_Prod,productClass.getId(), Constant.Pref_String,null);
+                Intent pro = new Intent(getActivity(), ProductDetails.class);
+                getActivity().startActivity(pro);
             }
         });
         search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
