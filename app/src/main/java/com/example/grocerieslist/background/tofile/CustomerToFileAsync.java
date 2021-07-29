@@ -1,13 +1,21 @@
-package com.example.grocerieslist.tofile;
+package com.example.grocerieslist.background.tofile;
 
 import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.grocerieslist.R;
 import com.example.grocerieslist.db.customer.CustomerClass;
+import com.example.grocerieslist.init.Loading;
 import com.example.grocerieslist.utilities.AppGlobal;
 import com.example.grocerieslist.utilities.Constant;
 
@@ -18,6 +26,8 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+
+import androidx.core.app.NotificationCompat;
 
 /**
  * Created by Tejaswi on 20/07/21.
@@ -106,6 +116,41 @@ public class CustomerToFileAsync  extends AsyncTask<Void,Void,Void> {
         }
     }
 
+    private void addNotification(String title,String msg) {
+
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(act.getApplicationContext(), "customer_notify_001");
+        Intent ii = new Intent(act.getApplicationContext(), Loading.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(act, 0, ii, 0);
+
+        NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
+        bigText.bigText(msg); //detail mode is the "expanded" notification
+        bigText.setBigContentTitle(msg);
+        bigText.setSummaryText("Downloaded"); //small text under notification
+
+        mBuilder.setContentIntent(pendingIntent);
+        mBuilder.setSmallIcon(R.mipmap.logo); //notification icon
+        mBuilder.setContentTitle(title); //main title
+        mBuilder.setContentText(msg); //main text when you "haven't expanded" the notification yet
+        mBuilder.setPriority(Notification.PRIORITY_MAX);
+        mBuilder.setStyle(bigText);
+
+        NotificationManager mNotificationManager = (NotificationManager) act.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        NotificationChannel channel = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            channel = new NotificationChannel("notify_001",
+                    "Channel human readable title",
+                    NotificationManager.IMPORTANCE_DEFAULT);
+            if (mNotificationManager != null) {
+                mNotificationManager.createNotificationChannel(channel);
+            }
+        }
+
+        if (mNotificationManager != null) {
+            mNotificationManager.notify(0, mBuilder.build());
+        }
+    }
+
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
@@ -113,6 +158,7 @@ public class CustomerToFileAsync  extends AsyncTask<Void,Void,Void> {
         stopRecording();
         if (dialog.isShowing()) {
             dialog.dismiss();
+            addNotification("Customer List",filename.getName()+" download successful");
         }
         Toast.makeText(act,"Completed the file parsing...",Toast.LENGTH_SHORT).show();
     }

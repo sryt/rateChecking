@@ -1,4 +1,4 @@
-package com.example.grocerieslist.background;
+package com.example.grocerieslist.background.readfile;
 
 import android.Manifest;
 import android.app.Activity;
@@ -13,35 +13,29 @@ import android.widget.Toast;
 
 import com.example.grocerieslist.db.customer.CustomerAccess;
 import com.example.grocerieslist.db.customer.CustomerClass;
-import com.example.grocerieslist.db.stock.StockAccess;
-import com.example.grocerieslist.db.stock.StockClass;
-import com.example.grocerieslist.utilities.AppGlobal;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 /**
- * Created by Tejaswi on 21/07/21.
+ * Created by Tejaswi on 13/07/21.
  */
-public class ProcessStockAsync extends AsyncTask<Void,Void,Void> {
-    String TAG = ProcessDataAsync.class.getSimpleName();
-    String path;
-    Activity act;
-    AppGlobal global;
-    Intent data;
-    private ProgressDialog dialog;
-    String[] ids;
+public class ProcessCustAsync extends AsyncTask<Void,Void,Void> {
+        String TAG = ProcessDataAsync.class.getSimpleName();
+        String path;
+        Activity act;
+        Intent data;
+        private ProgressDialog dialog;
+        String[] ids;
 
-    public ProcessStockAsync(String path, Activity act, Intent data) {
+    public ProcessCustAsync(String path, Activity act,Intent data) {
         this.path = path;
         this.act = act;
         this.data = data;
-        global = new AppGlobal(act);
         dialog = new ProgressDialog(act);
     }
 
@@ -73,36 +67,36 @@ public class ProcessStockAsync extends AsyncTask<Void,Void,Void> {
                     ids=csvLine.split(",");
                     try{
                         /**
-                         * 0 - Name
-                         * 1 - Customer Name
-                         * 2 - Date Time
-                         * 3 - Quantity
-                         * 4 - Type
-                         * 5 - Remark
+                         * 0 - Name                     7 - State code
+                         * 1 - Address                  8 - Phone1
+                         * 2 - Place                    9 - Email
+                         * 3 - aad1                     10 - GST Number
+                         * 4 - add2                     11 - Type
+                         * 5 - phone                    12 - Status
+                         * 6 - pin                      13 - State
                          **/
 
                         String name = checkValue(ids[0]);
-                        String custName = checkValue(ids[1]);
-                        String ts = checkValue(ids[2]);
-                        String qty = checkValue(ids[3]);
-                        String type = checkValue(ids[4]);
-                        String remark = checkValue(ids[5]);
+                        String address = checkValue(ids[1]);
+                        String place = checkValue(ids[2]);
+                        String add1 = checkValue(ids[3]);
+                        String add2 = checkValue(ids[4]);
+                        String phone = checkValue(ids[5]);
+                        String pin = checkValue(ids[6]);
+                        String stateCode = checkValue(ids[7]);
+                        String phone1 = checkValue(ids[8]);
+                        String email = checkValue(ids[9]);
+                        String gst = checkValue(ids[10]);
+                        String type= checkValue(ids[11]);
+                        String status = checkValue(ids[12]);
+                        String state = checkValue(ids[13]);
 
+                        CustomerClass cc = new CustomerClass(name,address,add1,add2,place,state,stateCode,pin,phone,phone1,email,gst,type,status);
+                        Log.i(TAG,"customer class is "+cc.toString());
                         CustomerAccess ca = new CustomerAccess(act);
                         ca.open();
-                        CustomerClass cc = ca.getCustomerDetailsByName(custName);
+                        ca.addCustomerDetails(cc);
                         ca.close();
-
-                        if(cc != null){
-                            StockClass psc = new StockClass(name,cc.getId(),"","",ts,type,qty,remark);
-                            StockAccess psa = new StockAccess(act);
-                            psa.open();
-                            psa.addProductStockDetails(psc);
-                            psa.close();
-                        }else{
-                            Toast.makeText(act,"Kindly add the customer "+custName+". And try again to add missing stock",Toast.LENGTH_SHORT).show();
-                        }
-
                     }catch (Exception e){
                         Log.e(TAG,e.toString());
                     }

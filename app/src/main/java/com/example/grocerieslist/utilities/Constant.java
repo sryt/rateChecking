@@ -13,9 +13,9 @@ public class Constant {
     public static String ITEMS = "items";
     public static String GROUP = "group";
 
-    public static String ACTIVE = "active";
-    public static String DEACTIVE = "deactive";
-    public static String INACTIVE = "inactive";
+    public static String ACTIVE = "ACTIVE";
+    public static String DEACTIVE = "DEACTIVE";
+    public static String INACTIVE = "INACTIVE";
 
 
     public static int Pref_Boolean = 1;

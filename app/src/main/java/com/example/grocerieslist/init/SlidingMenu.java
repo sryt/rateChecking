@@ -22,11 +22,20 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.grocerieslist.R;
-import com.example.grocerieslist.background.ProcessCustAsync;
-import com.example.grocerieslist.background.ProcessDataAsync;
-import com.example.grocerieslist.background.ProcessStockAsync;
+import com.example.grocerieslist.background.readfile.ProcessCustAsync;
+import com.example.grocerieslist.background.readfile.ProcessDataAsync;
+import com.example.grocerieslist.background.readfile.ProcessStockAsync;
+import com.example.grocerieslist.background.tofile.CustomerToFileAsync;
+import com.example.grocerieslist.background.tofile.ProductToFileAsync;
+import com.example.grocerieslist.background.tofile.StockAdjToFileAsync;
 import com.example.grocerieslist.db.company.CompanyAccess;
 import com.example.grocerieslist.db.company.CompanyClass;
+import com.example.grocerieslist.db.customer.CustomerAccess;
+import com.example.grocerieslist.db.customer.CustomerClass;
+import com.example.grocerieslist.db.product.ProductAccess;
+import com.example.grocerieslist.db.product.ProductClass;
+import com.example.grocerieslist.db.stock.StockAccess;
+import com.example.grocerieslist.db.stock.StockClass;
 import com.example.grocerieslist.db.stockdetails.StockDetailsAccess;
 import com.example.grocerieslist.db.stockdetails.StockDetailsClass;
 import com.example.grocerieslist.fragment.CompanyFragment;
@@ -35,7 +44,6 @@ import com.example.grocerieslist.fragment.DashboardFragment;
 import com.example.grocerieslist.fragment.LocationFragment;
 import com.example.grocerieslist.fragment.PickUpPersonFragment;
 import com.example.grocerieslist.fragment.product.PriceListFragment;
-import com.example.grocerieslist.fragment.product.ProductFragment;
 import com.example.grocerieslist.fragment.SettingsFragment;
 import com.example.grocerieslist.fragment.product.ProductTabFragment;
 import com.example.grocerieslist.fragment.stock.StockTabFragment;
@@ -366,7 +374,7 @@ public class SlidingMenu extends AppCompatActivity {
                 .into(imgProfile);
 
         // showing dot next to notifications label
-        navigationView.getMenu().getItem(3).setActionView(R.layout.menu_dot);
+        //navigationView.getMenu().getItem(3).setActionView(R.layout.menu_dot);
     }
 
     /***
@@ -590,6 +598,9 @@ public class SlidingMenu extends AppCompatActivity {
         if (navItemIndex == 0) {
             getMenuInflater().inflate(R.menu.main, menu);
         }
+        if(navItemIndex == 1 || navItemIndex == 2 || navItemIndex == 5){
+            getMenuInflater().inflate(R.menu.export, menu);
+        }
 
         // when fragment is notifications, load the menu created for notifications
         if (navItemIndex == 3) {
@@ -624,6 +635,18 @@ public class SlidingMenu extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Clear all notifications!", Toast.LENGTH_LONG).show();
         }
 
+        if(id == R.id.action_export){
+            Toast.makeText(this,CURRENT_TAG,Toast.LENGTH_SHORT).show();
+            if(CURRENT_TAG.equals(TAG_PRODUCT)){
+                exportProd();
+            }else if(CURRENT_TAG.equals(TAG_STOCK)){
+                exportStock();
+            }else if(CURRENT_TAG.equals(TAG_CUSTOMER)){
+                exportCust();
+            }
+
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -634,6 +657,45 @@ public class SlidingMenu extends AppCompatActivity {
             fab.show();
         else
             fab.hide();
+    }
+
+    public void exportProd(){
+        ProductAccess pa = new ProductAccess(SlidingMenu.this);
+        pa.open();
+        List<ProductClass> pcs = pa.getProdDetails();
+        pa.close();
+
+        if(pcs.size() > 0) {
+            ProductToFileAsync async = new ProductToFileAsync(this, pcs);
+            async.execute();
+        }else
+            Toast.makeText(getApplicationContext(), Constant.NO_DATA, Toast.LENGTH_LONG).show();
+    }
+
+    public void exportCust(){
+        CustomerAccess ca = new CustomerAccess(this);
+        ca.open();
+        List<CustomerClass> ccs = ca.getCustomerDetails();
+        ca.close();
+
+        if(ccs.size() > 0) {
+            CustomerToFileAsync async = new CustomerToFileAsync(this, ccs);
+            async.execute();
+        }else
+            Toast.makeText(getApplicationContext(), Constant.NO_DATA, Toast.LENGTH_LONG).show();
+    }
+
+    public void exportStock(){
+        StockAccess sa = new StockAccess(this);
+        sa.open();
+        List<StockClass> scs = sa.getProductStock();
+        sa.close();
+
+        if(scs.size() > 0) {
+            StockAdjToFileAsync async = new StockAdjToFileAsync(this, null);
+            async.execute();
+        }else
+            Toast.makeText(getApplicationContext(), Constant.NO_DATA, Toast.LENGTH_LONG).show();
     }
 
 }
