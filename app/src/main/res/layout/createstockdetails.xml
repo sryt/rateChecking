@@ -9,14 +9,24 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimaryDark"
-        android:orientation="vertical">
+        android:orientation="horizontal">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="@dimen/fab_margin"
+            android:layout_weight="0.6"
+            android:textSize="20dp"
             android:textColor="@color/primary_text"
             android:id="@+id/csd_title"
-            android:text="@string/exportDataD"/>
+            android:text="@string/app_name"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="0.4"
+            android:id="@+id/csd_edit"
+            android:visibility="invisible"
+            android:src="@drawable/outline_edit_24"/>
     </LinearLayout>
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
@@ -45,6 +55,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:inputType="textCapSentences"
             android:id="@+id/csd_desc"/>
     </com.google.android.material.textfield.TextInputLayout>
     <LinearLayout
@@ -59,6 +70,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:inputType="textCapWords"
                 android:id="@+id/csd_state"/>
         </com.google.android.material.textfield.TextInputLayout>
         <com.google.android.material.textfield.TextInputLayout

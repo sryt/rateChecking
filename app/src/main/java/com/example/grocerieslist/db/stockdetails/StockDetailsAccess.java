@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.example.grocerieslist.db.prodImg.ProdImgAccess;
+import com.example.grocerieslist.db.stock.StockDB;
 import com.example.grocerieslist.utilities.AppGlobal;
 
 import java.util.ArrayList;
@@ -60,6 +61,23 @@ public class StockDetailsAccess {
 
         Cursor cursor = database.rawQuery(myquery,null);
         if(cursor.getCount() > 0){
+            res = true;
+        }
+        return res;
+    }
+
+    public boolean updateStockDetails(StockDetailsClass sdc){
+        boolean res = false;
+        String myquery = "UPDATE "+ StockDetailsDB.TABLE+" SET "+ StockDetailsDB.KEY_NAME+" = '"+sdc.getName()+"',"
+                + StockDetailsDB.KEY_ADDRESS+" ='"+sdc.getAddress()+"',"+ StockDetailsDB.KEY_TYPE+" ='"+sdc.getType()+"',"
+                + StockDetailsDB.KEY_STATE+" ='"+sdc.getState()+"'," + StockDetailsDB.KEY_STATUS+" ='"+sdc.getStatus()+"',"+ StockDetailsDB.KEY_DESC+" ='"+sdc.getDesc()+"',"
+                + StockDetailsDB.KEY_PINCODE+" ='"+sdc.getPincode()+"',"+ StockDetailsDB.KEY_NUMBER+" ='"+sdc.getNumber()+"' WHERE "
+                + StockDetailsDB.KEY_ID+" = "+Integer.parseInt(sdc.getId());
+
+        Log.i(TAG,"qry is "+myquery);
+        Cursor cursor = database.rawQuery(myquery,null);
+        Log.i(TAG,"Cursor count is "+cursor.getCount());
+        if(cursor.getCount() == 0){
             res = true;
         }
         return res;
